@@ -1,0 +1,35 @@
+@utility form-container {
+    @apply space-y-4;
+}
+
+@utility form-title {
+    @apply text-xl font-bold;
+}
+
+@utility form-field {
+    @apply flex flex-col gap-1;
+}
+
+@utility form-label {
+    @apply block text-sm font-medium text-gray-700;
+}
+
+@utility form-input {
+    @apply w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+}
+
+@utility form-select {
+    @apply w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white;
+}
+
+@utility form-actions {
+    @apply flex justify-end gap-2 mt-6;
+}
+
+@utility form-button-cancel {
+    @apply px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors text-sm font-medium cursor-pointer;
+}
+
+@utility form-button-submit {
+    @apply px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition-colors text-sm font-medium cursor-pointer;
+}

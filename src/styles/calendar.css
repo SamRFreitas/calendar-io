@@ -1,0 +1,19 @@
+@utility calendar-day {
+    @apply w-full aspect-square flex items-center justify-center bg-white border border-gray-200 rounded-md transition-colors duration-200;
+}
+
+@utility calendar-day-today {
+    @apply text-black font-semibold;
+}
+
+@utility calendar-day-other-month {
+    @apply bg-gray-50 text-gray-400;
+}
+
+@utility calendar-day-hover {
+    @apply hover:bg-gray-100;
+}
+
+@utility calendar-day-today-hover {
+    @apply hover:bg-blue-600;
+}

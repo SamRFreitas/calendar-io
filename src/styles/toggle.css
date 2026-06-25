@@ -1,0 +1,27 @@
+@utility view-toggle-container {
+    @apply w-full flex justify-start;
+}
+
+@utility view-toggle-group {
+    @apply flex gap-2 bg-gray-100 p-1 rounded-lg;
+}
+
+@utility view-toggle-button {
+    @apply px-5 py-2 rounded-md text-lg font-bold transition-colors bg-transparent text-gray-700 hover:text-black cursor-pointer;
+}
+
+@utility view-toggle-button-active {
+    @apply bg-black text-white hover:text-white cursor-pointer;
+}
+
+@utility nav-button {
+    @apply px-4 py-1.5 rounded-md bg-white hover:bg-gray-300 transition-colors text-lg font-medium cursor-pointer;
+}
+
+@utility nav-button-today {
+    @apply px-4 py-1.5 rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-colors text-lg font-medium cursor-pointer;
+}
+
+@utility nav-title {
+    @apply text-lg font-bold text-white;
+}

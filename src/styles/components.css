@@ -1,0 +1,23 @@
+@utility add-event-button {
+    @apply px-4 py-2 rounded-md bg-white text-black hover:bg-gray-200 transition-colors font-bold text-base cursor-pointer;
+}
+
+@utility event-badge {
+    @apply truncate px-1 py-0.5 rounded text-white text-xs cursor-pointer transition-colors duration-150;
+}
+
+@utility event-badge-hover {
+    @apply hover:brightness-90;
+}
+
+@utility event-meeting {
+    @apply bg-black;
+}
+
+@utility event-slot {
+    @apply bg-green-500;
+}
+
+@utility event-task {
+    @apply bg-yellow-500;
+}
