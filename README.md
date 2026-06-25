@@ -67,4 +67,66 @@ To install dependencies and start the development server with a single command:
 - **Why**: Reliable, fast, and integrated well with TypeScript. Tests cover the core business logic (date utilities, Redux slice, data loading) to ensure the application behaves correctly under various conditions.
 - **Trade-off**: Time constraints prevented full E2E testing with Playwright, but the existing test suite provides confidence in the core functionality.
 
+## ⚠️ Known Limitations and Areas for Future Improvement
 
+### Known Limitations
+
+#### Redux Toolkit and State Management
+
+- **Limitation**: This is my first React project built entirely from scratch, and while I chose Redux Toolkit for state management, I recognize that my implementation may have some "smells" (as Uncle Bob would say) in the global state architecture.
+- **Why**: Lack of real-world production experience with Redux Toolkit and complex state patterns.
+- **Impact**: Some components may be over-connected to the store, and selectors could be better optimized.
+- **Goal**: With more experience or mentorship from a Senior React Engineer, I would refactor the state layer to be more predictable and maintainable.
+
+#### JSON Data Loading
+
+- **Limitation**: The approach used to load the `events.json` file via `fetch` may not follow best practices for production applications.
+- **Why**: The current implementation is functional but does not handle advanced scenarios like caching, retries, or error boundaries.
+- **Impact**: While it works for this challenge, it may not be robust enough for a production environment.
+- **Goal**: Refactor to use a more structured data layer (e.g., RTK Query or React Query) for better caching and error handling.
+
+#### Test Coverage
+
+- **Limitation**: While unit tests cover core business logic (date utilities, Redux slice, data loading), component-level tests are missing.
+- **Why**: Time constraints and lack of hands-on experience with React Testing Library.
+- **Impact**: I cannot guarantee full confidence in UI behavior across edge cases.
+- **Goal**: Add component tests with React Testing Library and, ideally, E2E tests with Playwright.
+
+#### Responsiveness
+
+- **Limitation**: The UI is not fully responsive for mobile devices.
+- **Why**: The challenge description did not explicitly require responsiveness, so I prioritized desktop functionality and feature completeness.
+- **Impact**: The application works well on desktop but may have usability issues on smaller screens.
+- **Goal**: Implement a responsive design to ensure a consistent experience across all devices.
+
+---
+
+### Areas for Future Improvement
+
+#### Refactor Redux Toolkit Implementation
+
+- Separate UI state from domain state (e.g., calendar view, selected date).
+
+#### Improve Data Loading
+
+- Implement error boundaries for better error handling.
+- Add loading states and skeleton screens for a smoother UX.
+- Cache events to avoid redundant fetches on navigation.
+
+#### Expand Test Coverage
+
+- Write component tests with React Testing Library.
+- Add E2E tests with Playwright to cover critical user flows (add, edit, delete events).
+- Test edge cases like invalid date inputs, duplicate event IDs, and large datasets.
+
+#### Responsive Design
+
+- Make the calendar fully responsive for mobile and tablet devices.
+- Adjust font sizes, spacing, and layouts for smaller screens.
+- Test on multiple devices and screen sizes.
+
+#### Custom Hooks for Reusability
+
+- Extract reusable logic (e.g., event filtering, date navigation) into custom hooks.
+- Improve separation of concerns by moving business logic out of UI components.
+- Make the codebase easier to test and maintain.
