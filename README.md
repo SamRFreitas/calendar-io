@@ -1,73 +1,29 @@
-# React + TypeScript + Vite
+# Eco Calendar
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A single-page calendar application built with React and TypeScript. It displays events in month and week views, with full CRUD functionality. This project was developed as part of a front-end technical challenge.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 📌 About the Challenge
 
-## React Compiler
+The challenge consists of building a calendar application that:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Displays events in **month** and **week** views
+- Allows **creating, editing, and deleting** events
+- Uses **React + TypeScript** (required)
+- Does not use ready-made calendar libraries (e.g., FullCalendar)
+- Includes **automated tests** (unit and/or E2E)
+- Is delivered as a **git bundle** (no public repository)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## ✅ Features
 
-```js
-export default defineConfig([
-    globalIgnores(['dist']),
-    {
-        files: ['**/*.{ts,tsx}'],
-        extends: [
-            // Other configs...
-
-            // Remove tseslint.configs.recommended and replace with this
-            tseslint.configs.recommendedTypeChecked,
-            // Alternatively, use this for stricter rules
-            tseslint.configs.strictTypeChecked,
-            // Optionally, add this for stylistic rules
-            tseslint.configs.stylisticTypeChecked,
-
-            // Other configs...
-        ],
-        languageOptions: {
-            parserOptions: {
-                project: ['./tsconfig.node.json', './tsconfig.app.json'],
-                tsconfigRootDir: import.meta.dirname,
-            },
-            // other options...
-        },
-    },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-    globalIgnores(['dist']),
-    {
-        files: ['**/*.{ts,tsx}'],
-        extends: [
-            // Other configs...
-            // Enable lint rules for React
-            reactX.configs['recommended-typescript'],
-            // Enable lint rules for React DOM
-            reactDom.configs.recommended,
-        ],
-        languageOptions: {
-            parserOptions: {
-                project: ['./tsconfig.node.json', './tsconfig.app.json'],
-                tsconfigRootDir: import.meta.dirname,
-            },
-            // other options...
-        },
-    },
-])
-```
+- Month and week views
+- Full CRUD (create, edit, delete events)
+- Events color-coded by type (`meeting`, `slot`, `task`)
+- Reusable modal with a unified form (create/edit)
+- Toast notifications for success/error feedback
+- Initial events loaded via simulated `fetch`
+- Navigation between months and weeks
+- "Today" button to return to the current date
