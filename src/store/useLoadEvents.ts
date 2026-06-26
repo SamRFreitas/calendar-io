@@ -1,13 +1,13 @@
 import { useEffect, useState, useRef } from 'react'
 import { useDispatch } from 'react-redux'
-import { addEvent } from './eventsSlice'
+import { addEvent } from '../store/eventsSlice'
 import { type Event } from '../types/event'
 
 export function useLoadEvents() {
     const dispatch = useDispatch()
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
-    const hasLoaded = useRef(false) // controle para evitar duplicação
+    const hasLoaded = useRef(false)
 
     useEffect(() => {
         if (hasLoaded.current) return
@@ -15,6 +15,13 @@ export function useLoadEvents() {
 
         const loadEvents = async () => {
             try {
+                const stored = localStorage.getItem('events')
+
+                if (stored) {
+                    setLoading(false)
+                    return
+                }
+
                 await new Promise((resolve) => setTimeout(resolve, 500))
                 const response = await fetch('/events.json')
                 if (!response.ok) {
@@ -22,7 +29,6 @@ export function useLoadEvents() {
                 }
 
                 const data: Event[] = await response.json()
-
                 data.forEach((event) => {
                     dispatch(addEvent(event))
                 })
