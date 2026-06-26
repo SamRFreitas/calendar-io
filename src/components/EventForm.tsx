@@ -1,30 +1,70 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import toast from 'react-hot-toast'
+import dayjs from 'dayjs'
 import { addEvent, updateEvent, deleteEvent } from '@/store/eventsSlice'
 import { type Event } from '@/types/event'
+import { useAppSelector } from '@/store/hooks'
+import { selectEvents } from '@/store/eventsSlice'
 
 interface EventFormProps {
-    event?: Event | null // se tiver, é edição; se não, é criação
+    event?: Event | null
     onClose: () => void
 }
 
 export default function EventForm({ event, onClose }: EventFormProps) {
     const dispatch = useDispatch()
     const isEditing = !!event
+    const existingEvents = useAppSelector(selectEvents)
+
+    const now = dayjs()
+    const minDate = now.format('YYYY-MM-DDTHH:mm')
 
     const [name, setName] = useState(event?.name || '')
     const [type, setType] = useState<Event['type']>(event?.type || 'meeting')
     const [startDate, setStartDate] = useState(
-        event?.startDate.slice(0, 16) || '',
+        event?.startDate.slice(0, 16) || minDate
     )
-    const [endDate, setEndDate] = useState(event?.endDate.slice(0, 16) || '')
+    const [endDate, setEndDate] = useState(
+        event?.endDate.slice(0, 16) || minDate
+    )
 
-    const handleSave = () => {
+    const validateEvent = (): boolean => {
         if (!name || !startDate || !endDate) {
             toast.error('Please fill in all fields')
-            return
+            return false
         }
+
+        const start = dayjs(startDate)
+        const end = dayjs(endDate)
+
+        if (start.isBefore(now)) {
+            toast.error('Cannot create an event in the past')
+            return false
+        }
+
+        if (!end.isAfter(start)) {
+            toast.error('End date must be after start date')
+            return false
+        }
+
+        const hasConflict = existingEvents.some((e: Event) => {
+            if (isEditing && e.id === event?.id) return false
+            const eStart = dayjs(e.startDate)
+            const eEnd = dayjs(e.endDate)
+            return start.isBefore(eEnd) && end.isAfter(eStart)
+        })
+
+        if (hasConflict) {
+            toast.error('This time slot conflicts with an existing event')
+            return false
+        }
+
+        return true
+    }
+
+    const handleSave = () => {
+        if (!validateEvent()) return
 
         if (isEditing && event) {
             const updatedEvent: Event = {
@@ -73,6 +113,7 @@ export default function EventForm({ event, onClose }: EventFormProps) {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className="form-input"
+                    data-testid="event-name"
                 />
             </div>
 
@@ -82,6 +123,7 @@ export default function EventForm({ event, onClose }: EventFormProps) {
                     value={type}
                     onChange={(e) => setType(e.target.value as Event['type'])}
                     className="form-select"
+                    data-testid="event-type"
                 >
                     <option value="meeting">Meeting</option>
                     <option value="slot">Slot</option>
@@ -96,6 +138,8 @@ export default function EventForm({ event, onClose }: EventFormProps) {
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
                     className="form-input"
+                    min={minDate}
+                    data-testid="event-start"
                 />
             </div>
 
@@ -106,6 +150,8 @@ export default function EventForm({ event, onClose }: EventFormProps) {
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
                     className="form-input"
+                    min={startDate || minDate}
+                    data-testid="event-end"
                 />
             </div>
 
@@ -115,6 +161,7 @@ export default function EventForm({ event, onClose }: EventFormProps) {
                         type="button"
                         onClick={handleDelete}
                         className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors text-sm font-medium cursor-pointer"
+                        data-testid="event-delete"
                     >
                         Delete
                     </button>
@@ -131,6 +178,7 @@ export default function EventForm({ event, onClose }: EventFormProps) {
                         type="button"
                         onClick={handleSave}
                         className="form-button-submit"
+                        data-testid="event-save"
                     >
                         {isEditing ? 'Save' : 'Add'}
                     </button>
