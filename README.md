@@ -166,6 +166,16 @@ npx playwright test --headed
 
 ### Areas for Future Improvement
 
+#### Click on Day to Add Event
+
+- Allow users to click directly on a calendar day to open the event creation modal with the selected date pre‑filled.
+- Improves UX by reducing steps and making event creation more intuitive.
+
+#### Multi‑day Events
+
+- Support events that span multiple days (e.g., startDate on one day, endDate on a later day).
+- Display these events visually across the corresponding days in both month and week views.
+
 #### Refactor Redux Toolkit Implementation
 
 - Separate UI state from domain state (e.g., calendar view, selected date).
