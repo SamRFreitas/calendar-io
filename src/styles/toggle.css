@@ -11,7 +11,7 @@
 }
 
 @utility view-toggle-button-active {
-    @apply bg-black text-white hover:text-white cursor-pointer;
+    @apply bg-primary text-white hover:text-white cursor-pointer;
 }
 
 @utility nav-button {

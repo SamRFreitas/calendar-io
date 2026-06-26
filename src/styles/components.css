@@ -11,11 +11,7 @@
 }
 
 @utility event-meeting {
-    @apply bg-black;
-}
-
-@utility event-slot {
-    @apply bg-green-500;
+    @apply bg-secondary;
 }
 
 @utility event-task {
