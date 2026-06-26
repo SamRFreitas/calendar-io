@@ -39,20 +39,38 @@ A single-page calendar application built with React and TypeScript. It displays 
 
 ### Run
 
-To install dependencies and start the development server with a single command:
+To install dependencies (npm install )and start the development server (npm run dev) with a single command:
 
-`npm star`
+```
+npm start
+```
 
 ## Running Tests
 
 ### Run all unit tests (Jest)
-```npm test```
+```
+npm test
+```
 
 ### Run E2E tests (Playwright)
-```npx playwright test```
 
-### Run E2E tests with headed mode (visible browser)
-```npx playwright test --headed```
+⚠️ Important: The development server must be running before running E2E tests.
+
+```
+npm run dev
+```
+
+Run E2E tests in headless mode (browser not shown)
+
+```
+npx playwright test
+```
+
+Run E2E tests with visible browser (headed mode)
+
+```
+npx playwright test --headed
+```
 
 ## 🧠 Assumptions and Decisions Made
 
