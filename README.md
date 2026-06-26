@@ -10,25 +10,38 @@ A single-page calendar application built with React and TypeScript. It displays 
 - **npm** (comes with Node.js)
 - The following core dependencies are used:
 
-| Dependency | Version | Purpose |
-|---|---|---|
-| React | 19.2.6 | UI framework (required) |
-| TypeScript | 6.0.2 | Type safety (required) |
-| Redux Toolkit | 2.12.0 | State management (encouraged) |
-| React Redux | 9.3.0 | React bindings for Redux |
-| Day.js | 1.11.21 | Date manipulation |
-| Tailwind CSS | 4.3.1 | Styling with `@utility` |
-| Vite | 8.0.12 | Bundler |
-| Jest | 30.4.2 | Unit testing (encouraged) |
-| React Testing Library | 16.3.2 | Component testing |
-| ESLint | 10.3.0 | Code linting |
-| Prettier | 3.8.4 | Code formatting |
+| Dependency            | Version | Purpose                       |
+| --------------------- | ------- | ----------------------------- |
+| React                 | 19.2.6  | UI framework (required)       |
+| TypeScript            | 6.0.2   | Type safety (required)        |
+| Redux Toolkit         | 2.12.0  | State management (encouraged) |
+| React Redux           | 9.3.0   | React bindings for Redux      |
+| Day.js                | 1.11.21 | Date manipulation             |
+| Tailwind CSS          | 4.3.1   | Styling with `@utility`       |
+| Vite                  | 8.0.12  | Bundler                       |
+| Jest                  | 30.4.2  | Unit testing (encouraged)     |
+| Playwright            | 1.61.1  | E2E testing                   |
+| ESLint                | 10.3.0  | Code linting                  |
+| Prettier              | 3.8.4   | Code formatting               |
+
 
 ### Run
 
 To install dependencies and start the development server with a single command:
 
-```npm star```
+`npm star`
+
+### Running Tests
+
+```bash
+# Run all unit tests (Jest)
+npm test
+
+# Run E2E tests (Playwright)
+npx playwright test
+
+# Run E2E tests with headed mode (visible browser)
+npx playwright test --headed
 
 ## 🧠 Assumptions and Decisions Made
 
@@ -63,9 +76,30 @@ To install dependencies and start the development server with a single command:
 
 ### Testing Strategy
 
-- **Decision**: Used Jest for unit tests, focusing on edge cases and negative scenarios.
-- **Why**: Reliable, fast, and integrated well with TypeScript. Tests cover the core business logic (date utilities, Redux slice, data loading) to ensure the application behaves correctly under various conditions.
-- **Trade-off**: Time constraints prevented full E2E testing with Playwright, but the existing test suite provides confidence in the core functionality.
+- **Decision**: Used **Jest** for unit tests (encouraged by the challenge) and **Playwright** for E2E tests.
+- **Why**: Jest is fast and integrates well with TypeScript for testing core business logic (date utilities, Redux slice, data loading). Playwright covers critical user flows (add, edit, delete, persistence, and validations).
+- **Trade-off**: E2E tests take longer to run but provide confidence that the application works as a whole.
+
+### Data Persistence
+
+- **Decision**: Used `localStorage` to persist events across page reloads.
+- **Why**: Simple, client-side storage that requires no additional dependencies. Events are saved automatically on each CRUD operation and loaded on app initialization.
+
+### Validation and Edge Cases
+
+- **Decision**: Implemented validations to handle edge cases such as:
+  - Blocking events in the past (both visually via `min` attribute and on save)
+  - Preventing overlapping events (time slot conflicts)
+  - Ordering events by start time
+  - Styling past dates differently
+- **Why**: Ensures data integrity and improves user experience by preventing invalid or conflicting operations.
+
+### Testing with `data-testid`
+
+- **Decision**: Used `data-testid` attributes on key elements (buttons, inputs, events) for E2E tests.
+- **Why**: More robust than text-based selectors, avoiding issues with localization or UI changes.
+
+---
 
 ## ⚠️ Known Limitations and Areas for Future Improvement
 
@@ -83,14 +117,7 @@ To install dependencies and start the development server with a single command:
 - **Limitation**: The approach used to load the `events.json` file via `fetch` may not follow best practices for production applications.
 - **Why**: The current implementation is functional but does not handle advanced scenarios like caching, retries, or error boundaries.
 - **Impact**: While it works for this challenge, it may not be robust enough for a production environment.
-- **Goal**: Refactor to use a more structured data layer (e.g., RTK Query or React Query) for better caching and error handling.
-
-#### Test Coverage
-
-- **Limitation**: While unit tests cover core business logic (date utilities, Redux slice, data loading), component-level tests are missing.
-- **Why**: Time constraints and lack of hands-on experience with React Testing Library.
-- **Impact**: I cannot guarantee full confidence in UI behavior across edge cases.
-- **Goal**: Add component tests with React Testing Library and, ideally, E2E tests with Playwright.
+- **Goal**: Refactor to use a more structured data layer better caching and error handling.
 
 #### Responsiveness
 
@@ -98,8 +125,6 @@ To install dependencies and start the development server with a single command:
 - **Why**: The challenge description did not explicitly require responsiveness, so I prioritized desktop functionality and feature completeness.
 - **Impact**: The application works well on desktop but may have usability issues on smaller screens.
 - **Goal**: Implement a responsive design to ensure a consistent experience across all devices.
-
----
 
 ### Areas for Future Improvement
 
@@ -116,7 +141,6 @@ To install dependencies and start the development server with a single command:
 #### Expand Test Coverage
 
 - Write component tests with React Testing Library.
-- Add E2E tests with Playwright to cover critical user flows (add, edit, delete events).
 - Test edge cases like invalid date inputs, duplicate event IDs, and large datasets.
 
 #### Responsive Design
