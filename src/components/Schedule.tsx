@@ -43,25 +43,22 @@ export default function Schedule() {
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center h-screen">
-                <p className="text-lg text-gray-600">Loading events...</p>
+            <div className="loading-screen">
+                <p className="loading-text">Loading events...</p>
             </div>
         )
     }
 
     if (error) {
         return (
-            <div className="flex items-center justify-center h-screen">
-                <p className="text-lg text-red-600">
-                    Error loading events: {error}
-                </p>
+            <div className="error-screen">
+                <p className="error-text">Error loading events: {error}</p>
             </div>
         )
     }
 
     return (
-
-        <div className="w-full max-w-5xl 2xl:max-2-6xl mx-auto px-8 mt-8">
+        <div className="schedule-container">
             <Menu>
                 <ViewToggle view={viewType} onChange={setViewType} />
                 <NavigationBar
@@ -87,7 +84,7 @@ export default function Schedule() {
                 </div>
             </Menu>
 
-            <div className="grid grid-cols-7 text-center mt-8 bg-primary text-white font-bold rounded-t-lg text-lg py-4">
+            <div className="week-header">
                 {week.map((item, index) => (
                     <div key={index} className="w-full">
                         {item}
@@ -123,6 +120,5 @@ export default function Schedule() {
                 )}
             </Modal>
         </div>
-
     )
 }
