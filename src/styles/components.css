@@ -17,3 +17,31 @@
 @utility event-task {
     @apply bg-yellow-500;
 }
+
+@utility menu-container {
+  @apply flex justify-between gap-4 p-4 bg-primary rounded-xl shadow-sm mb-6;
+}
+
+@utility schedule-container {
+  @apply w-full max-w-5xl 2xl:max-w-6xl mx-auto px-8 mt-8;
+}
+
+@utility week-header {
+  @apply grid grid-cols-7 text-center mt-8 bg-primary text-white font-bold rounded-t-lg text-lg py-4;
+}
+
+@utility loading-screen {
+  @apply flex items-center justify-center h-screen;
+}
+
+@utility loading-text {
+  @apply text-lg text-gray-600;
+}
+
+@utility error-screen {
+  @apply flex items-center justify-center h-screen;
+}
+
+@utility error-text {
+  @apply text-lg text-red-600;
+}
