@@ -31,5 +31,5 @@
 }
 
 @utility form-button-submit {
-    @apply px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 transition-colors text-sm font-medium cursor-pointer;
+    @apply px-4 py-2 bg-primary text-white rounded-md hover:bg-gray-800 transition-colors text-sm font-medium cursor-pointer;
 }
