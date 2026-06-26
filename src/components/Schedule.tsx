@@ -57,29 +57,24 @@ export default function Schedule() {
 
     return (
         <div className="w-full mx-auto px-8 mt-8">
-
             <Menu>
-
                 <ViewToggle view={viewType} onChange={setViewType} />
-
                 <NavigationBar
                     currentDate={currentDate}
                     view={viewType}
                     onPrev={goPrev}
                     onNext={goNext}
                 />
-
                 <div className="flex justify-end w-full">
                     <button
                         onClick={() => setIsModalOpen(true)}
                         className="add-event-button"
+                        data-testid="add-event-button"
                     >
                         + Adicionar Evento
                     </button>
                 </div>
-
             </Menu>
-            
 
             <div className="grid grid-cols-7 text-center mt-8 bg-[#1a1a1a] text-white font-bold rounded-t-lg text-lg py-4">
                 {week.map((item, index) => (
