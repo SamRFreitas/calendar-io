@@ -43,15 +43,15 @@ To install dependencies and start the development server with a single command:
 
 `npm star`
 
-### Running Tests
+## Running Tests
 
-# Run all unit tests (Jest)
+### Run all unit tests (Jest)
 ```npm test```
 
-# Run E2E tests (Playwright)
+### Run E2E tests (Playwright)
 ```npx playwright test```
 
-# Run E2E tests with headed mode (visible browser)
+### Run E2E tests with headed mode (visible browser)
 ```npx playwright test --headed```
 
 ## 🧠 Assumptions and Decisions Made
