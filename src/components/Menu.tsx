@@ -7,9 +7,7 @@ interface MenuProps {
 export default function Menu({ children }: MenuProps) {
 
   return (
-    <div className="flex justify-between gap-4 p-4 bg-primary rounded-xl shadow-sm mb-6">
-      {children}
-    </div>
+    <div className="menu-container"> {children} </div>
   )
 
 }
