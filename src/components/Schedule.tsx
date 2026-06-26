@@ -37,6 +37,10 @@ export default function Schedule() {
         setCurrentDate((prev) => prev.add(1, unit))
     }
 
+    const goToday = () => {
+        setCurrentDate(dayjs())
+    }
+
     if (loading) {
         return (
             <div className="flex items-center justify-center h-screen">
@@ -56,7 +60,8 @@ export default function Schedule() {
     }
 
     return (
-        <div className="w-full mx-auto px-8 mt-8">
+
+        <div className="w-full max-w-5xl 2xl:max-2-6xl mx-auto px-8 mt-8">
             <Menu>
                 <ViewToggle view={viewType} onChange={setViewType} />
                 <NavigationBar
@@ -67,16 +72,22 @@ export default function Schedule() {
                 />
                 <div className="flex justify-end w-full">
                     <button
+                        onClick={goToday}
+                        className="add-event-button mr-8"
+                    >
+                        Today
+                    </button>
+                    <button
                         onClick={() => setIsModalOpen(true)}
                         className="add-event-button"
                         data-testid="add-event-button"
                     >
-                        + Adicionar Evento
+                        + Add Event
                     </button>
                 </div>
             </Menu>
 
-            <div className="grid grid-cols-7 text-center mt-8 bg-[#1a1a1a] text-white font-bold rounded-t-lg text-lg py-4">
+            <div className="grid grid-cols-7 text-center mt-8 bg-primary text-white font-bold rounded-t-lg text-lg py-4">
                 {week.map((item, index) => (
                     <div key={index} className="w-full">
                         {item}
@@ -112,5 +123,6 @@ export default function Schedule() {
                 )}
             </Modal>
         </div>
+
     )
 }
