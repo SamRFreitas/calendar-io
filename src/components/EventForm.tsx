@@ -75,7 +75,7 @@ export default function EventForm({ event, onClose }: EventFormProps) {
                 endDate,
             }
             dispatch(updateEvent(updatedEvent))
-            toast.success('Event updated successfully! 🎉')
+            toast.success('Event updated successfully!')
         } else {
             const newEvent: Event = {
                 id: crypto.randomUUID(),
@@ -85,7 +85,7 @@ export default function EventForm({ event, onClose }: EventFormProps) {
                 endDate,
             }
             dispatch(addEvent(newEvent))
-            toast.success('Event added successfully! 🎉')
+            toast.success('Event added successfully!')
         }
 
         onClose()
@@ -126,7 +126,6 @@ export default function EventForm({ event, onClose }: EventFormProps) {
                     data-testid="event-type"
                 >
                     <option value="meeting">Meeting</option>
-                    <option value="slot">Slot</option>
                     <option value="task">Task</option>
                 </select>
             </div>
