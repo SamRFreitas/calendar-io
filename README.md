@@ -33,15 +33,14 @@ To install dependencies and start the development server with a single command:
 
 ### Running Tests
 
-```bash
 # Run all unit tests (Jest)
-npm test
+```npm test```
 
 # Run E2E tests (Playwright)
-npx playwright test
+```npx playwright test```
 
 # Run E2E tests with headed mode (visible browser)
-npx playwright test --headed
+```npx playwright test --headed```
 
 ## 🧠 Assumptions and Decisions Made
 
