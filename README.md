@@ -45,9 +45,18 @@ To install dependencies (npm install )and start the development server (npm run 
 npm start
 ```
 
+### Running with Docker
+
+Build and start the container, then open the browser
+
+```
+npm run docker:start
+```
+
 ## Running Tests
 
 ### Run all unit tests (Jest)
+
 ```
 npm test
 ```
