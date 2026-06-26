@@ -13,7 +13,6 @@ interface DayProps {
 
 const typeColorClass = {
     meeting: 'event-meeting',
-    slot: 'event-slot',
     task: 'event-task',
 }
 
@@ -34,21 +33,26 @@ export default function Day({ day, view, onEventClick }: DayProps) {
     if (view === 'month' && isOtherMonth) {
         className += ' opacity-0 pointer-events-none'
     }
-    if (view === 'week' && isOtherMonth) {
-        className += ' bg-gray-100 text-gray-400'
-    }
+
     if (isToday) {
         className += ' calendar-day-today'
     }
+
     if (isPast && !isOtherMonth && !isToday) {
         className += ' bg-gray-100 text-gray-500'
     }
 
     return (
         <div className={className}>
+            {view === 'week' && (
+                <span className="absolute top-1 left-1 text-xs font-medium text-gray-500">
+                    {day.date.format('MMM')}
+                </span>
+            )}
+
             <div className="absolute top-1 right-1 flex items-center justify-center">
                 {isToday ? (
-                    <span className="bg-black text-white font-bold rounded-full w-8 h-8 flex items-center justify-center text-sm">
+                    <span className="bg-primary text-white font-bold rounded-full w-8 h-8 flex items-center justify-center text-sm">
                         {day.dayOfMonth}
                     </span>
                 ) : (
