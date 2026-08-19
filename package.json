@@ -10,6 +10,8 @@
         "lint": "eslint .",
         "preview": "vite preview",
         "test": "jest",
+        "test:e2e": "npx playwright test",
+        "test:e2e:visual": "npx playwright test --headed",
         "format": "prettier --write .",
         "docker:start": "docker compose up -d && sleep 3 && open http://localhost:5173"
     },
