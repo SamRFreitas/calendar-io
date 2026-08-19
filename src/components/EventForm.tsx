@@ -2,17 +2,19 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import toast from 'react-hot-toast'
 import dayjs from 'dayjs'
-import { addEvent, updateEvent, deleteEvent } from '@/store/eventsSlice'
-import { type Event } from '@/types/event'
-import { useAppSelector } from '@/store/hooks'
-import { selectEvents } from '@/store/eventsSlice'
+import { addEvent, updateEvent, deleteEvent } from '../store/eventsSlice'
+import { type Event } from '../types/event'
+import { useAppSelector } from '../store/hooks'
+import { selectEvents } from '../store/eventsSlice'
 
 interface EventFormProps {
     event?: Event | null
     onClose: () => void
+    startDate?: string
+    endDate?: string
 }
 
-export default function EventForm({ event, onClose }: EventFormProps) {
+export default function EventForm({ event, onClose, startDate: propStartDate, endDate: propEndDate }: EventFormProps) {
     const dispatch = useDispatch()
     const isEditing = !!event
     const existingEvents = useAppSelector(selectEvents)
@@ -22,11 +24,14 @@ export default function EventForm({ event, onClose }: EventFormProps) {
 
     const [name, setName] = useState(event?.name || '')
     const [type, setType] = useState<Event['type']>(event?.type || 'meeting')
+    const [allDay, setAllDay] = useState(
+        event?.allDay || false
+    )
     const [startDate, setStartDate] = useState(
-        event?.startDate.slice(0, 16) || minDate
+        event?.startDate?.slice(0, 16) || propStartDate || minDate
     )
     const [endDate, setEndDate] = useState(
-        event?.endDate.slice(0, 16) || minDate
+        event?.endDate?.slice(0, 16) || propEndDate || minDate
     )
 
     const validateEvent = (): boolean => {
@@ -66,13 +71,21 @@ export default function EventForm({ event, onClose }: EventFormProps) {
     const handleSave = () => {
         if (!validateEvent()) return
 
+        // Format dates: if allDay, ensure YYYY-MM-DD format for ISO storage
+        const formattedStartDate = allDay
+            ? dayjs(startDate).startOf('day').format('YYYY-MM-DDTHH:mm')
+            : startDate
+        const formattedEndDate = allDay
+            ? dayjs(endDate).endOf('day').format('YYYY-MM-DDTHH:mm')
+            : endDate
+
         if (isEditing && event) {
             const updatedEvent: Event = {
                 ...event,
                 name,
                 type,
-                startDate,
-                endDate,
+                startDate: formattedStartDate,
+                endDate: formattedEndDate,
             }
             dispatch(updateEvent(updatedEvent))
             toast.success('Event updated successfully!')
@@ -81,8 +94,8 @@ export default function EventForm({ event, onClose }: EventFormProps) {
                 id: crypto.randomUUID(),
                 name,
                 type,
-                startDate,
-                endDate,
+                startDate: formattedStartDate,
+                endDate: formattedEndDate,
             }
             dispatch(addEvent(newEvent))
             toast.success('Event added successfully!')
@@ -131,52 +144,74 @@ export default function EventForm({ event, onClose }: EventFormProps) {
             </div>
 
             <div className="form-field">
+                <label className="form-label">
+                    <input
+                        type="checkbox"
+                        checked={allDay}
+                        onChange={() => setAllDay(!allDay)}
+                        className="form-checkbox"
+                    />
+                    All day
+                </label>
+            </div>
+
+            <div className="form-field">
                 <label className="form-label">Start</label>
                 <input
-                    type="datetime-local"
+                    type={allDay ? 'date' : 'datetime-local'}
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
                     className="form-input"
-                    min={minDate}
+                    min={allDay ? now.format('YYYY-MM-DD') : minDate}
                     data-testid="event-start"
                 />
+                {allDay && (
+                    <p className="text-xs text-gray-500 mt-1">
+                        Select dates (not times)
+                    </p>
+                )}
             </div>
 
             <div className="form-field">
                 <label className="form-label">End</label>
                 <input
-                    type="datetime-local"
+                    type={allDay ? 'date' : 'datetime-local'}
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
                     className="form-input"
-                    min={startDate || minDate}
+                    min={allDay ? startDate || now.format('YYYY-MM-DD') : startDate || minDate}
                     data-testid="event-end"
                 />
+                {allDay && (
+                    <p className="text-xs text-gray-500 mt-1">
+                        Select dates (not times)
+                    </p>
+                )}
             </div>
 
-            <div className="flex justify-between items-center mt-6">
+            <div className="sm:flex sm:flex-col sm:items-center sm:justify-center">
                 {isEditing && (
                     <button
                         type="button"
                         onClick={handleDelete}
-                        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors text-sm font-medium cursor-pointer"
+                        className="w-full px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors text-sm font-medium cursor-pointer"
                         data-testid="event-delete"
                     >
                         Delete
                     </button>
                 )}
-                <div className="flex gap-2 ml-auto">
+                <div className="sm:w-full flex gap-2 mt-4 sm:mt-0">
                     <button
                         type="button"
                         onClick={onClose}
-                        className="form-button-cancel"
+                        className="form-button-cancel w-full"
                     >
                         Cancel
                     </button>
                     <button
                         type="button"
                         onClick={handleSave}
-                        className="form-button-submit"
+                        className="form-button-submit w-full"
                         data-testid="event-save"
                     >
                         {isEditing ? 'Save' : 'Add'}
