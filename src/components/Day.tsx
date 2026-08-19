@@ -86,7 +86,7 @@ export default function Day({ day, view, onEventClick, onDayClick }: DayProps) {
                     <div
                         key={event.id}
                         className={getEventClasses(event)}
-                        onClick={() => onEventClick(event)}
+                        onClick={(e) => { e.stopPropagation(); onEventClick(event); }}
                         data-testid={`event-${event.id}`}
                     >
                         {event.name}
