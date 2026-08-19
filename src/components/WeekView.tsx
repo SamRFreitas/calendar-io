@@ -6,9 +6,10 @@ import { type Event } from '@/types/event'
 interface WeekViewProps {
     currentDate: dayjs.Dayjs
     onEventClick: (event: Event) => void
+    onDayClick?: (date: dayjs.Dayjs) => void
 }
 
-export default function WeekView({ currentDate, onEventClick }: WeekViewProps) {
+export default function WeekView({ currentDate, onEventClick, onDayClick }: WeekViewProps) {
     const days = buildWeekDays(currentDate)
 
     return (
@@ -19,6 +20,7 @@ export default function WeekView({ currentDate, onEventClick }: WeekViewProps) {
                     day={day}
                     view="week"
                     onEventClick={onEventClick}
+                    onDayClick={onDayClick}
                 />
             ))}
         </div>
