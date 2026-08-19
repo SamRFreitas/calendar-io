@@ -1,14 +1,15 @@
-import { type Day as DayType } from '@/types/day'
-import { type ScheduleType } from '@/types/schedule'
-import { useAppSelector } from '@/store/hooks'
-import { selectEventsByDate } from '@/store/eventsSlice'
-import { type Event } from '@/types/event'
+import { type Day as DayType } from '../types/day'
+import { type ScheduleType } from '../types/schedule'
+import { useAppSelector } from '../store/hooks'
+import { selectEventsByDate } from '../store/eventsSlice'
+import { type Event } from '../types/event'
 import dayjs from 'dayjs'
 
 interface DayProps {
     day: DayType
     view: ScheduleType
     onEventClick: (event: Event) => void
+    onDayClick?: (date: dayjs.Dayjs) => void
 }
 
 const typeColorClass = {
@@ -16,7 +17,15 @@ const typeColorClass = {
     task: 'event-task',
 }
 
-export default function Day({ day, view, onEventClick }: DayProps) {
+const getEventClasses = (event: Event) => {
+    const baseClasses = `event-badge event-badge-hover ${typeColorClass[event.type]}`
+    if (event.allDay) {
+        return `${baseClasses} multi-day`
+    }
+    return baseClasses
+}
+
+export default function Day({ day, view, onEventClick, onDayClick }: DayProps) {
     const dateStr = day.date.format('YYYY-MM-DD')
     const events = useAppSelector(selectEventsByDate(dateStr))
 
@@ -42,8 +51,14 @@ export default function Day({ day, view, onEventClick }: DayProps) {
         className += ' bg-gray-100 text-gray-500'
     }
 
+    const handleDayClick = () => {
+        if (!isOtherMonth && onDayClick) {
+            onDayClick(day.date)
+        }
+    }
+
     return (
-        <div className={className}>
+        <div className={className} onClick={handleDayClick}>
             {view === 'week' && (
                 <span className="absolute top-1 left-1 text-xs font-medium text-gray-500">
                     {day.date.format('MMM')}
@@ -70,7 +85,7 @@ export default function Day({ day, view, onEventClick }: DayProps) {
                 {sortedEvents.map((event: Event) => (
                     <div
                         key={event.id}
-                        className={`event-badge event-badge-hover ${typeColorClass[event.type]}`}
+                        className={getEventClasses(event)}
                         onClick={() => onEventClick(event)}
                         data-testid={`event-${event.id}`}
                     >
