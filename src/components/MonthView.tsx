@@ -6,11 +6,13 @@ import { type Event } from '@/types/event'
 interface MonthViewProps {
     currentDate: dayjs.Dayjs
     onEventClick: (event: Event) => void
+    onDayClick?: (date: dayjs.Dayjs) => void
 }
 
 export default function MonthView({
     currentDate,
     onEventClick,
+    onDayClick,
 }: MonthViewProps) {
     const days = buildMonthDays(currentDate)
 
@@ -22,6 +24,7 @@ export default function MonthView({
                     day={day}
                     view="month"
                     onEventClick={onEventClick}
+                    onDayClick={onDayClick}
                 />
             ))}
         </div>
