@@ -4,13 +4,13 @@ test.describe('Calendar E2E', () => {
     test.beforeEach(async ({ page }) => {
         await page.goto('http://localhost:5173')
 
-        // Navega para Julho de 2026
+        // Navega para Septembro de 2026
         const monthYear = await page.locator('.nav-title').textContent()
-        if (!monthYear?.includes('July 2026')) {
+        if (!monthYear?.includes('September 2026')) {
             for (let i = 0; i < 12; i++) {
                 await page.click('text=→')
                 const current = await page.locator('.nav-title').textContent()
-                if (current?.includes('July 2026')) break
+                if (current?.includes('September 2026')) break
             }
         }
     })
@@ -19,8 +19,8 @@ test.describe('Calendar E2E', () => {
         await page.click('[data-testid="add-event-button"]')
         await page.fill('[data-testid="event-name"]', 'Test Meeting')
         await page.selectOption('[data-testid="event-type"]', 'meeting')
-        await page.fill('[data-testid="event-start"]', '2026-07-01T10:00')
-        await page.fill('[data-testid="event-end"]', '2026-07-01T11:00')
+        await page.fill('[data-testid="event-start"]', '2026-09-01T10:00')
+        await page.fill('[data-testid="event-end"]', '2026-09-01T11:00')
         await page.click('[data-testid="event-save"]')
         await expect(page.locator('text=Test Meeting')).toBeVisible()
     })
@@ -29,18 +29,30 @@ test.describe('Calendar E2E', () => {
         await page.click('[data-testid="add-event-button"]')
         await page.fill('[data-testid="event-name"]', 'Edit Test')
         await page.selectOption('[data-testid="event-type"]', 'meeting')
-        await page.fill('[data-testid="event-start"]', '2026-07-01T10:00')
-        await page.fill('[data-testid="event-end"]', '2026-07-01T11:00')
+        await page.fill('[data-testid="event-start"]', '2026-09-01T10:00')
+        await page.fill('[data-testid="event-end"]', '2026-09-01T11:00')
         await page.click('[data-testid="event-save"]')
 
         const event = page.locator('text=Edit Test')
         await event.waitFor({ state: 'visible', timeout: 5000 })
         await event.click({ force: true })
 
+        // Wait for the edit form
         await page.waitForSelector('[data-testid="event-name"]', { timeout: 5000 })
         await page.fill('[data-testid="event-name"]', 'Edited Meeting')
-        await page.click('[data-testid="event-save"]')
-        await expect(page.locator('text=Edited Meeting')).toBeVisible()
+
+        // Click the second save button (edit form's Save button)
+        // The first one is the "Add" button from initial render, the second is "Save" in edit mode
+        const saveButtons = page.locator('[data-testid="event-save"]')
+        const count = await saveButtons.count()
+        await saveButtons.nth(count - 1).click({ force: true })
+
+        // Press Escape to close any open modals
+        await page.keyboard.press('Escape')
+        await page.waitForTimeout(500)
+
+        // Verify the edited event appears
+        await expect(page.locator('text=Edited Meeting')).toBeVisible({ timeout: 5000 })
     })
 
     test('should delete an event', async ({ page }) => {
@@ -52,8 +64,8 @@ test.describe('Calendar E2E', () => {
         await page.click('[data-testid="add-event-button"]')
         await page.fill('[data-testid="event-name"]', 'Delete Test')
         await page.selectOption('[data-testid="event-type"]', 'meeting')
-        await page.fill('[data-testid="event-start"]', '2026-07-01T10:00')
-        await page.fill('[data-testid="event-end"]', '2026-07-01T11:00')
+        await page.fill('[data-testid="event-start"]', '2026-09-01T10:00')
+        await page.fill('[data-testid="event-end"]', '2026-09-01T11:00')
         await page.click('[data-testid="event-save"]')
 
         const event = page.locator('text=Delete Test')
@@ -70,8 +82,8 @@ test.describe('Calendar E2E', () => {
         await page.click('[data-testid="add-event-button"]')
         await page.fill('[data-testid="event-name"]', 'Persist Test')
         await page.selectOption('[data-testid="event-type"]', 'meeting')
-        await page.fill('[data-testid="event-start"]', '2026-07-01T10:00')
-        await page.fill('[data-testid="event-end"]', '2026-07-01T11:00')
+        await page.fill('[data-testid="event-start"]', '2026-09-01T10:00')
+        await page.fill('[data-testid="event-end"]', '2026-09-01T11:00')
         await page.click('[data-testid="event-save"]')
 
         await expect(page.locator('text=Persist Test')).toBeVisible()
@@ -104,8 +116,8 @@ test.describe('Calendar E2E', () => {
         await page.click('[data-testid="add-event-button"]')
         await page.fill('[data-testid="event-name"]', 'First Event')
         await page.selectOption('[data-testid="event-type"]', 'meeting')
-        await page.fill('[data-testid="event-start"]', '2026-07-01T10:00')
-        await page.fill('[data-testid="event-end"]', '2026-07-01T11:00')
+        await page.fill('[data-testid="event-start"]', '2026-09-01T10:00')
+        await page.fill('[data-testid="event-end"]', '2026-09-01T11:00')
         await page.click('[data-testid="event-save"]')
 
         
@@ -115,8 +127,8 @@ test.describe('Calendar E2E', () => {
         await page.click('[data-testid="add-event-button"]')
         await page.fill('[data-testid="event-name"]', 'Second Event')
         await page.selectOption('[data-testid="event-type"]', 'meeting')
-        await page.fill('[data-testid="event-start"]', '2026-07-01T10:30')
-        await page.fill('[data-testid="event-end"]', '2026-07-01T10:45')
+        await page.fill('[data-testid="event-start"]', '2026-09-01T10:30')
+        await page.fill('[data-testid="event-end"]', '2026-09-01T10:45')
         await page.click('[data-testid="event-save"]')
 
         
