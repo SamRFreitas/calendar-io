@@ -80,7 +80,7 @@ describe('useLoadEvents', () => {
 
         await waitFor(() => {
             expect(result.current.loading).toBe(false)
-            expect(result.current.error).toBe('Failed to fetch events')
+            expect(result.current.error).toBe('Failed to fetch events: 404')
         })
 
         expect(mockDispatch).not.toHaveBeenCalled()
