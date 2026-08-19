@@ -10,7 +10,7 @@
 ![ESLint](https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white)
 ![Prettier](https://img.shields.io/badge/prettier-%23F7B93E.svg?style=for-the-badge&logo=prettier&logoColor=black)
 
-# Eco Calendar
+# Calendar IO
 
 A single-page calendar application built with React and TypeScript. It displays events in month and week views, with full CRUD functionality. This project was developed as part of a front-end technical challenge.
 
