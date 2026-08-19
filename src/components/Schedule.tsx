@@ -1,7 +1,8 @@
 import dayjs from 'dayjs'
 import localeData from 'dayjs/plugin/localeData'
-import { useState } from 'react'
-import { type ScheduleType } from '@/types/schedule'
+import { useAppSelector, useAppDispatch } from '@/store/hooks'
+import { setViewType, setCurrentDate as uiSetCurrentDate, openModal, closeModal, setEditingEvent } from '@/store/uiSlice'
+import { type RootState } from '@/store/index'
 import Menu from './Menu'
 import ViewToggle from './ViewToggle'
 import NavigationBar from './NavigationBar'
@@ -15,30 +16,37 @@ import { useLoadEvents } from '@/store/useLoadEvents'
 dayjs.extend(localeData)
 
 export default function Schedule() {
-    const [currentDate, setCurrentDate] = useState(dayjs())
-    const [viewType, setViewType] = useState<ScheduleType>('month')
-    const [isModalOpen, setIsModalOpen] = useState(false)
-    const [editingEvent, setEditingEvent] = useState<Event | null>(null)
-    const { loading, error } = useLoadEvents()
+    const dispatch = useAppDispatch()
+
+    // UI state from Redux slice
+    const { viewType, currentDate, isModalOpen, editingEvent } = useAppSelector((state: RootState) => state.ui)
+
+    // Derive week day names from currentDate locale
+    const week = dayjs.localeData().weekdays()
+
+    const { loading, error, hasError } = useLoadEvents()
 
     const handleEventClick = (event: Event) => {
-        setEditingEvent(event)
+        dispatch(setEditingEvent(event))
     }
 
-    const week = dayjs.localeData().weekdays()
+    const handleDayClick = (date: dayjs.Dayjs) => {
+        dispatch(uiSetCurrentDate(date))
+        dispatch(openModal())
+    }
 
     const goPrev = () => {
         const unit = viewType === 'week' ? 'week' : 'month'
-        setCurrentDate((prev) => prev.subtract(1, unit))
+        dispatch(uiSetCurrentDate(currentDate.subtract(1, unit)))
     }
 
     const goNext = () => {
         const unit = viewType === 'week' ? 'week' : 'month'
-        setCurrentDate((prev) => prev.add(1, unit))
+        dispatch(uiSetCurrentDate(currentDate.add(1, unit)))
     }
 
     const goToday = () => {
-        setCurrentDate(dayjs())
+        dispatch(uiSetCurrentDate(dayjs()))
     }
 
     if (loading) {
@@ -49,10 +57,24 @@ export default function Schedule() {
         )
     }
 
-    if (error) {
+    if (hasError) {
         return (
             <div className="error-screen">
                 <p className="error-text">Error loading events: {error}</p>
+                <button
+                    onClick={() => window.location.reload()}
+                    className="retry-button"
+                >
+                    Retry
+                </button>
+            </div>
+        )
+    }
+
+    if (!currentDate) {
+        return (
+            <div className="empty-state">
+                <p>No events found</p>
             </div>
         )
     }
@@ -60,7 +82,10 @@ export default function Schedule() {
     return (
         <div className="schedule-container">
             <Menu>
-                <ViewToggle view={viewType} onChange={setViewType} />
+                <ViewToggle
+                    view={viewType}
+                    onChange={(view) => dispatch(setViewType(view))}
+                />
                 <NavigationBar
                     currentDate={currentDate}
                     view={viewType}
@@ -75,7 +100,7 @@ export default function Schedule() {
                         Today
                     </button>
                     <button
-                        onClick={() => setIsModalOpen(true)}
+                        onClick={() => dispatch(openModal())}
                         className="add-event-button"
                         data-testid="add-event-button"
                     >
@@ -85,7 +110,7 @@ export default function Schedule() {
             </Menu>
 
             <div className="week-header">
-                {week.map((item, index) => (
+                {week.map((item: string, index: number) => (
                     <div key={index} className="w-full">
                         {item}
                     </div>
@@ -96,26 +121,28 @@ export default function Schedule() {
                 <WeekView
                     currentDate={currentDate}
                     onEventClick={handleEventClick}
+                    onDayClick={handleDayClick}
                 />
             ) : (
                 <MonthView
                     currentDate={currentDate}
                     onEventClick={handleEventClick}
+                    onDayClick={handleDayClick}
                 />
             )}
 
-            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
-                <EventForm onClose={() => setIsModalOpen(false)} />
+            <Modal isOpen={isModalOpen} onClose={() => dispatch(closeModal())}>
+                <EventForm onClose={() => dispatch(closeModal())} />
             </Modal>
 
             <Modal
                 isOpen={!!editingEvent}
-                onClose={() => setEditingEvent(null)}
+                onClose={() => dispatch(setEditingEvent(null))}
             >
                 {editingEvent && (
                     <EventForm
                         event={editingEvent}
-                        onClose={() => setEditingEvent(null)}
+                        onClose={() => dispatch(setEditingEvent(null))}
                     />
                 )}
             </Modal>
