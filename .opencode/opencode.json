@@ -1,0 +1,8 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": [
+    "eoc-opencode",
+    "opencode-forge",
+    "@devcxl/opencode-spec"
+  ]
+}

@@ -24,6 +24,7 @@
         "tailwindcss": "^4.3.1"
     },
     "devDependencies": {
+        "@devcxl/opencode-spec": "^0.2.0",
         "@eslint/js": "^10.0.1",
         "@playwright/test": "^1.61.1",
         "@testing-library/jest-dom": "^6.9.1",
@@ -34,6 +35,7 @@
         "@types/react": "^19.2.14",
         "@types/react-dom": "^19.2.3",
         "@vitejs/plugin-react": "^6.0.1",
+        "eoc-opencode": "^1.8.0",
         "eslint": "^10.3.0",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-react-hooks": "^7.1.1",
@@ -41,6 +43,7 @@
         "globals": "^17.6.0",
         "jest": "^30.4.2",
         "jest-environment-jsdom": "^30.4.1",
+        "opencode-forge": "^0.9.0",
         "prettier": "^3.8.4",
         "ts-jest": "^29.4.11",
         "typescript": "~6.0.2",
