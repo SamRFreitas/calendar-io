@@ -18,6 +18,10 @@
     @apply bg-yellow-500;
 }
 
+@utility multi-day {
+    @apply bg-primary/20 border-l-4 border-primary rounded text-sm;
+}
+
 @utility menu-container {
   @apply flex justify-between gap-4 p-4 bg-primary rounded-xl shadow-sm mb-6;
 }
