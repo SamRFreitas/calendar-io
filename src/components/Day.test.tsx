@@ -139,7 +139,7 @@ describe('Day component', () => {
     }
     const { container } = renderDay(pastDayProps)
     const dayElement = container.querySelector('.calendar-day')
-    expect(dayElement?.classList).toContain('bg-gray-100')
-    expect(dayElement?.classList).toContain('text-gray-500')
+    expect(dayElement?.classList).toContain('bg-muted')
+    expect(dayElement?.classList).toContain('text-muted-foreground')
   })
 })
