@@ -48,7 +48,7 @@ export default function Day({ day, view, onEventClick, onDayClick }: DayProps) {
     }
 
     if (isPast && !isOtherMonth && !isToday) {
-        className += ' bg-gray-100 text-gray-500'
+        className += ' bg-muted text-muted-foreground'
     }
 
     const handleDayClick = () => {
@@ -60,7 +60,7 @@ export default function Day({ day, view, onEventClick, onDayClick }: DayProps) {
     return (
         <div className={className} onClick={handleDayClick}>
             {view === 'week' && (
-                <span className="absolute top-1 left-1 text-xs font-medium text-gray-500">
+                <span className="absolute top-1 left-1 text-xs font-medium text-muted-foreground">
                     {day.date.format('MMM')}
                 </span>
             )}
@@ -73,8 +73,8 @@ export default function Day({ day, view, onEventClick, onDayClick }: DayProps) {
                 ) : (
                     <span
                         className={`text-sm font-medium ${
-                            isPast && !isOtherMonth ? 'text-gray-500' : ''
-                        } ${isOtherMonth ? 'text-gray-400' : ''}`}
+                            isPast && !isOtherMonth ? 'text-muted-foreground' : ''
+                        } ${isOtherMonth ? 'text-muted-foreground' : ''}`}
                     >
                         {day.dayOfMonth}
                     </span>
