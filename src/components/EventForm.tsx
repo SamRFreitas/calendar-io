@@ -166,7 +166,7 @@ export default function EventForm({ event, onClose, startDate: propStartDate, en
                     data-testid="event-start"
                 />
                 {allDay && (
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-muted-foreground mt-1">
                         Select dates (not times)
                     </p>
                 )}
@@ -183,24 +183,24 @@ export default function EventForm({ event, onClose, startDate: propStartDate, en
                     data-testid="event-end"
                 />
                 {allDay && (
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-muted-foreground mt-1">
                         Select dates (not times)
                     </p>
                 )}
             </div>
 
-            <div className="sm:flex sm:flex-col sm:items-center sm:justify-center">
+            <div className="flex flex-col gap-2 mt-4">
                 {isEditing && (
                     <button
                         type="button"
                         onClick={handleDelete}
-                        className="w-full px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors text-sm font-medium cursor-pointer"
+                        className="form-button-delete"
                         data-testid="event-delete"
                     >
                         Delete
                     </button>
                 )}
-                <div className="sm:w-full flex gap-2 mt-4 sm:mt-0">
+                <div className="flex gap-2">
                     <button
                         type="button"
                         onClick={onClose}
