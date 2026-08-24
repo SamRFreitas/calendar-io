@@ -60,7 +60,7 @@ export default function Day({ day, view, onEventClick, onDayClick, onShowMore }:
     return (
         <div className={className} onClick={handleDayClick}>
             {view === 'week' && (
-                <span className="absolute top-1 left-1 text-xs font-medium text-muted-foreground">
+                <span className="absolute top-1 left-1 text-[10px] md:text-xs font-medium text-muted-foreground">
                     {day.date.format('MMM')}
                 </span>
             )}

@@ -122,7 +122,7 @@ describe('Day component', () => {
       onEventClick: jest.fn(),
     }
     const { container } = renderDay(dayProps)
-    const monthSpan = container.querySelector('.absolute.top-1.left-1.text-xs')
+    const monthSpan = container.querySelector('.absolute.top-1.left-1')
     expect(monthSpan).toBeInTheDocument()
     expect(monthSpan?.textContent).toBe('Jun')
   })
