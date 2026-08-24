@@ -7,12 +7,14 @@ interface MonthViewProps {
     currentDate: dayjs.Dayjs
     onEventClick: (event: Event) => void
     onDayClick?: (date: dayjs.Dayjs) => void
+    onShowMore?: (date: dayjs.Dayjs) => void
 }
 
 export default function MonthView({
     currentDate,
     onEventClick,
     onDayClick,
+    onShowMore,
 }: MonthViewProps) {
     const days = buildMonthDays(currentDate)
 
@@ -26,6 +28,7 @@ export default function MonthView({
                         view="month"
                         onEventClick={onEventClick}
                         onDayClick={onDayClick}
+                        onShowMore={onShowMore}
                     />
                 ))}
             </div>

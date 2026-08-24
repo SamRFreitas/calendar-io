@@ -10,6 +10,7 @@ interface DayProps {
     view: ScheduleType
     onEventClick: (event: Event) => void
     onDayClick?: (date: dayjs.Dayjs) => void
+    onShowMore?: (date: dayjs.Dayjs) => void
 }
 
 const typeColorClass = {
@@ -22,7 +23,7 @@ const getEventClasses = (event: Event) =>
 
 const MAX_VISIBLE_EVENTS = 2
 
-export default function Day({ day, view, onEventClick, onDayClick }: DayProps) {
+export default function Day({ day, view, onEventClick, onDayClick, onShowMore }: DayProps) {
     const dateStr = day.date.format('YYYY-MM-DD')
     const events = useAppSelector(selectEventsByDate(dateStr))
 
@@ -94,7 +95,7 @@ export default function Day({ day, view, onEventClick, onDayClick }: DayProps) {
                 {hiddenCount > 0 && (
                     <div
                         className="event-badge-more"
-                        onClick={(e) => { e.stopPropagation(); handleDayClick(); }}
+                        onClick={(e) => { e.stopPropagation(); onShowMore?.(day.date); }}
                     >
                         +{hiddenCount} more
                     </div>

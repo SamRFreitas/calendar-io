@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import localeData from 'dayjs/plugin/localeData'
 import { useAppSelector, useAppDispatch } from '@/store/hooks'
-import { setViewType, setCurrentDate as uiSetCurrentDate, openModal, closeModal, setEditingEvent } from '@/store/uiSlice'
+import { setViewType, setCurrentDate as uiSetCurrentDate, openModal, closeModal, setEditingEvent, openDayEvents, closeDayEvents } from '@/store/uiSlice'
 import { type RootState } from '@/store/index'
 import Menu from './Menu'
 import ViewToggle from './ViewToggle'
@@ -11,6 +11,7 @@ import MonthView from './MonthView'
 import WeekView from './WeekView'
 import Modal from '@/components/Modal'
 import EventForm from '@/components/EventForm'
+import DayEventsList from '@/components/DayEventsList'
 import { type Event } from '@/types/event'
 import { useLoadEvents } from '@/store/useLoadEvents'
 
@@ -20,7 +21,7 @@ export default function Schedule() {
     const dispatch = useAppDispatch()
 
     // UI state from Redux slice
-    const { viewType, currentDate: currentDateStr, isModalOpen, editingEvent } = useAppSelector((state: RootState) => state.ui)
+    const { viewType, currentDate: currentDateStr, isModalOpen, editingEvent, viewingDayEvents } = useAppSelector((state: RootState) => state.ui)
     const currentDate = dayjs(currentDateStr)
 
     // Derive week day names from currentDate locale
@@ -36,6 +37,10 @@ export default function Schedule() {
     const handleDayClick = (date: dayjs.Dayjs) => {
         dispatch(uiSetCurrentDate(date.toISOString()))
         dispatch(openModal())
+    }
+
+    const handleShowMore = (date: dayjs.Dayjs) => {
+        dispatch(openDayEvents(date.format('YYYY-MM-DD')))
     }
 
     const goPrev = () => {
@@ -131,12 +136,14 @@ export default function Schedule() {
                     currentDate={currentDate}
                     onEventClick={handleEventClick}
                     onDayClick={handleDayClick}
+                    onShowMore={handleShowMore}
                 />
             ) : (
                 <MonthView
                     currentDate={currentDate}
                     onEventClick={handleEventClick}
                     onDayClick={handleDayClick}
+                    onShowMore={handleShowMore}
                 />
             )}
 
@@ -152,6 +159,23 @@ export default function Schedule() {
                     <EventForm
                         event={editingEvent}
                         onClose={() => dispatch(setEditingEvent(null))}
+                    />
+                )}
+            </Modal>
+
+            <Modal isOpen={!!viewingDayEvents} onClose={() => dispatch(closeDayEvents())}>
+                {viewingDayEvents && (
+                    <DayEventsList
+                        date={viewingDayEvents}
+                        onEventClick={(event) => {
+                            dispatch(closeDayEvents())
+                            dispatch(setEditingEvent(event))
+                        }}
+                        onAddEvent={() => {
+                            dispatch(closeDayEvents())
+                            dispatch(uiSetCurrentDate(dayjs(viewingDayEvents).toISOString()))
+                            dispatch(openModal())
+                        }}
                     />
                 )}
             </Modal>

@@ -7,9 +7,10 @@ interface WeekViewProps {
     currentDate: dayjs.Dayjs
     onEventClick: (event: Event) => void
     onDayClick?: (date: dayjs.Dayjs) => void
+    onShowMore?: (date: dayjs.Dayjs) => void
 }
 
-export default function WeekView({ currentDate, onEventClick, onDayClick }: WeekViewProps) {
+export default function WeekView({ currentDate, onEventClick, onDayClick, onShowMore }: WeekViewProps) {
     const days = buildWeekDays(currentDate)
 
     return (
@@ -22,6 +23,7 @@ export default function WeekView({ currentDate, onEventClick, onDayClick }: Week
                         view="week"
                         onEventClick={onEventClick}
                         onDayClick={onDayClick}
+                        onShowMore={onShowMore}
                     />
                 ))}
             </div>
