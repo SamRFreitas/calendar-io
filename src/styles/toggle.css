@@ -1,13 +1,13 @@
 @utility view-toggle-container {
-    @apply w-full flex justify-start;
+    @apply flex justify-start;
 }
 
 @utility view-toggle-group {
-    @apply flex gap-2 bg-gray-100 p-1 rounded-lg;
+    @apply flex gap-2 bg-muted p-1 rounded-lg;
 }
 
 @utility view-toggle-button {
-    @apply px-5 py-2 rounded-md text-lg font-bold transition-colors bg-transparent text-gray-700 hover:text-black cursor-pointer;
+    @apply px-5 py-2 rounded-md text-lg font-bold transition-colors bg-transparent text-muted-foreground hover:text-foreground cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
 }
 
 @utility view-toggle-button-active {
@@ -15,11 +15,11 @@
 }
 
 @utility nav-button {
-    @apply px-4 py-1.5 rounded-md bg-white hover:bg-gray-300 transition-colors text-lg font-medium cursor-pointer;
+    @apply px-4 py-1.5 rounded-md bg-card hover:bg-border transition-colors text-lg font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
 }
 
 @utility nav-button-today {
-    @apply px-4 py-1.5 rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-colors text-lg font-medium cursor-pointer;
+    @apply px-4 py-1.5 rounded-md bg-primary text-white hover:bg-primary-hover transition-colors text-lg font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
 }
 
 @utility nav-title {
