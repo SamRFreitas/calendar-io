@@ -20,7 +20,8 @@ export default function Schedule() {
     const dispatch = useAppDispatch()
 
     // UI state from Redux slice
-    const { viewType, currentDate, isModalOpen, editingEvent } = useAppSelector((state: RootState) => state.ui)
+    const { viewType, currentDate: currentDateStr, isModalOpen, editingEvent } = useAppSelector((state: RootState) => state.ui)
+    const currentDate = dayjs(currentDateStr)
 
     // Derive week day names from currentDate locale
     const week = dayjs.localeData().weekdays()
@@ -32,22 +33,22 @@ export default function Schedule() {
     }
 
     const handleDayClick = (date: dayjs.Dayjs) => {
-        dispatch(uiSetCurrentDate(date))
+        dispatch(uiSetCurrentDate(date.toISOString()))
         dispatch(openModal())
     }
 
     const goPrev = () => {
         const unit = viewType === 'week' ? 'week' : 'month'
-        dispatch(uiSetCurrentDate(currentDate.subtract(1, unit)))
+        dispatch(uiSetCurrentDate(currentDate.subtract(1, unit).toISOString()))
     }
 
     const goNext = () => {
         const unit = viewType === 'week' ? 'week' : 'month'
-        dispatch(uiSetCurrentDate(currentDate.add(1, unit)))
+        dispatch(uiSetCurrentDate(currentDate.add(1, unit).toISOString()))
     }
 
     const goToday = () => {
-        dispatch(uiSetCurrentDate(dayjs()))
+        dispatch(uiSetCurrentDate(dayjs().toISOString()))
     }
 
     if (loading) {

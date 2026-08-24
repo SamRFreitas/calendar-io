@@ -1,5 +1,4 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import type { Dayjs } from 'dayjs'
 import dayjs from 'dayjs'
 import { type Event } from '../types/event'
 
@@ -27,7 +26,7 @@ const loadThemeFromLocalStorage = (): Theme => {
 
 interface UiState {
     viewType: 'month' | 'week'
-    currentDate: Dayjs
+    currentDate: string
     isModalOpen: boolean
     editingEvent: Event | null
     theme: Theme
@@ -35,7 +34,7 @@ interface UiState {
 
 const initialState: UiState = {
     viewType: 'month',
-    currentDate: dayjs(),
+    currentDate: dayjs().toISOString(),
     isModalOpen: false,
     editingEvent: null,
     theme: loadThemeFromLocalStorage(),
@@ -48,7 +47,7 @@ const uiSlice = createSlice({
         setViewType: (state, action: PayloadAction<'month' | 'week'>) => {
             state.viewType = action.payload
         },
-        setCurrentDate: (state, action: PayloadAction<Dayjs>) => {
+        setCurrentDate: (state, action: PayloadAction<string>) => {
             state.currentDate = action.payload
         },
         openModal: (state) => {

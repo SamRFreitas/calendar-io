@@ -27,7 +27,7 @@ Single-page calendar app: React 19 + TypeScript + Redux Toolkit + Tailwind v4 + 
 
 - `src/store/` — two slices in one store (`src/store/index.ts`):
   - `eventsSlice` — domain state. `items: Event[]`, persisted to `localStorage` under the `events` key on every mutation (`addEvent`, `updateEvent`, `deleteEvent`). `selectEventsByDate(date)` is a memoized selector (`createSelector`) filtering by `startDate.startsWith(date)`.
-  - `uiSlice` — UI-only state: `viewType` (`'month' | 'week'`), `currentDate` (a `Dayjs`, not a string), `isModalOpen`, `editingEvent`.
+  - `uiSlice` — UI-only state: `viewType` (`'month' | 'week'`), `currentDate` (an ISO string, converted to `Dayjs` in `Schedule.tsx`), `isModalOpen`, `editingEvent`.
   - `useLoadEvents()` (in `useLoadEvents.ts`) fetches `/events.json` once on mount and dispatches `addEvent` per entry — this is the seed-data loading path, separate from the localStorage persistence path.
 - `src/components/` — `Schedule` is the root component; `MonthView`/`WeekView` render grids of `Day` components; `EventForm` + `Modal` handle create/edit; `NavigationBar`/`ViewToggle`/`Menu` drive `uiSlice`.
 - `src/utils/` — pure date-grid functions consumed by the views: `buildMonthDays`/`buildWeekDays` (public entry points) build on `generateCurrentMonthDays`/`generatePreviousMonthDays`/`generateNextMonthDays`, `getDaysFromPreviousMonth`, `getStartOfWeek`, `calculateTotalDays`, `createDay`. Grids run 28–42 days for month view. `isCurrentMonth` distinguishes days from adjacent months (styled with reduced opacity / `pointer-events-none` in `Day`); `isToday` is only ever set on days where `isCurrentMonth` is true.
