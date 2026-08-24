@@ -1,4 +1,6 @@
 @import 'tailwindcss';
+@custom-variant dark (&:where(.dark, .dark *));
+
 @import './styles/calendar.css';
 @import './styles/toggle.css';
 @import './styles/modal.css';
@@ -8,4 +10,33 @@
 @theme {
   --color-primary: #0A81DA;
   --color-secondary: #00995D;
+  --color-primary-hover: #0A6BB5;
+  --color-warning: #F5A623;
+  --color-destructive: #DC2626;
+  --color-accent: #F6AE2D;
+
+  --color-background: #F8FAFC;
+  --color-foreground: #0F172A;
+  --color-card: #FFFFFF;
+  --color-border: #E4ECFC;
+  --color-muted: #F1F5FD;
+  --color-muted-foreground: #475569;
+  --color-error: #DC2626;
+}
+
+.dark {
+  color-scheme: dark;
+  --color-background: #020617;
+  --color-foreground: #F8FAFC;
+  --color-card: #0E1223;
+  --color-border: #334155;
+  --color-muted: #1A1E2F;
+  --color-muted-foreground: #94A3B8;
+  --color-error: #F87171;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+  }
 }
