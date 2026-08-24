@@ -13,7 +13,7 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
     return createPortal(
         <div className="modal-overlay">
             <div className="modal-content">
-                <button onClick={onClose} className="modal-close-button">
+                <button onClick={onClose} className="modal-close-button" aria-label="Close">
                     ×
                 </button>
                 <div className="mt-3">{children}</div>
