@@ -1,5 +1,5 @@
 @utility add-event-button {
-    @apply px-4 py-2 rounded-md bg-white text-black hover:bg-gray-200 transition-colors font-bold text-base cursor-pointer;
+    @apply px-4 py-2 rounded-md bg-card text-foreground hover:bg-muted transition-colors font-bold text-base cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
 }
 
 @utility event-badge {
@@ -15,7 +15,7 @@
 }
 
 @utility event-task {
-    @apply bg-yellow-500;
+    @apply bg-warning;
 }
 
 @utility multi-day {
@@ -23,7 +23,7 @@
 }
 
 @utility menu-container {
-  @apply flex justify-between gap-4 p-4 bg-primary rounded-xl shadow-sm mb-6;
+  @apply flex items-center justify-between gap-4 p-4 bg-primary rounded-xl shadow-sm mb-6;
 }
 
 @utility schedule-container {
@@ -39,7 +39,7 @@
 }
 
 @utility loading-text {
-  @apply text-lg text-gray-600;
+  @apply text-lg text-muted-foreground;
 }
 
 @utility error-screen {
@@ -47,5 +47,13 @@
 }
 
 @utility error-text {
-  @apply text-lg text-red-600;
+  @apply text-lg text-error;
+}
+
+@utility retry-button {
+  @apply px-4 py-2 rounded-md bg-primary text-white hover:bg-primary-hover transition-colors text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+}
+
+@utility empty-state {
+  @apply flex items-center justify-center h-40 text-muted-foreground;
 }
