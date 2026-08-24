@@ -20,6 +20,8 @@ const typeColorClass = {
 const getEventClasses = (event: Event) =>
     `event-badge event-badge-hover ${typeColorClass[event.type]}`
 
+const MAX_VISIBLE_EVENTS = 2
+
 export default function Day({ day, view, onEventClick, onDayClick }: DayProps) {
     const dateStr = day.date.format('YYYY-MM-DD')
     const events = useAppSelector(selectEventsByDate(dateStr))
@@ -31,8 +33,10 @@ export default function Day({ day, view, onEventClick, onDayClick }: DayProps) {
     const sortedEvents = [...events].sort((a, b) =>
         dayjs(a.startDate).diff(dayjs(b.startDate))
     )
+    const visibleEvents = sortedEvents.slice(0, MAX_VISIBLE_EVENTS)
+    const hiddenCount = sortedEvents.length - visibleEvents.length
 
-    let className = 'calendar-day relative'
+    let className = 'calendar-day'
 
     if (view === 'month' && isOtherMonth) {
         className += ' opacity-0 pointer-events-none'
@@ -62,7 +66,7 @@ export default function Day({ day, view, onEventClick, onDayClick }: DayProps) {
 
             <div className="absolute top-1 right-1 flex items-center justify-center">
                 {isToday ? (
-                    <span className="bg-primary text-white font-bold rounded-full w-8 h-8 flex items-center justify-center text-sm">
+                    <span className="bg-primary text-white font-bold rounded-full w-6 h-6 md:w-8 md:h-8 flex items-center justify-center text-xs md:text-sm">
                         {day.dayOfMonth}
                     </span>
                 ) : (
@@ -76,8 +80,8 @@ export default function Day({ day, view, onEventClick, onDayClick }: DayProps) {
                 )}
             </div>
 
-            <div className="absolute bottom-2 left-2 right-2 flex flex-col gap-0.5 text-xs">
-                {sortedEvents.map((event: Event) => (
+            <div className="absolute bottom-1 md:bottom-2 left-1 md:left-2 right-1 md:right-2 flex flex-col gap-1 text-xs">
+                {visibleEvents.map((event: Event) => (
                     <div
                         key={event.id}
                         className={getEventClasses(event)}
@@ -87,6 +91,14 @@ export default function Day({ day, view, onEventClick, onDayClick }: DayProps) {
                         {event.name}
                     </div>
                 ))}
+                {hiddenCount > 0 && (
+                    <div
+                        className="event-badge-more"
+                        onClick={(e) => { e.stopPropagation(); handleDayClick(); }}
+                    >
+                        +{hiddenCount} more
+                    </div>
+                )}
             </div>
         </div>
     )

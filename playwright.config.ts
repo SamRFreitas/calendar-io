@@ -1,4 +1,4 @@
-import { defineConfig } from '@playwright/test'
+import { defineConfig, devices } from '@playwright/test'
 
 export default defineConfig({
     testDir: './tests/E2E', //
@@ -10,4 +10,9 @@ export default defineConfig({
         //     slowMo: 2000,
         // },
     },
+    projects: [
+        { name: 'Desktop Chrome', use: { ...devices['Desktop Chrome'] } },
+        { name: 'iPad Mini', use: { ...devices['iPad Mini'] } },
+        { name: 'iPhone 13', use: { ...devices['iPhone 13'] } },
+    ],
 })

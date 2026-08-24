@@ -25,6 +25,7 @@ export default function Schedule() {
 
     // Derive week day names from currentDate locale
     const week = dayjs.localeData().weekdays()
+    const weekShort = dayjs.localeData().weekdaysMin()
 
     const { loading, error, hasError } = useLoadEvents()
 
@@ -84,21 +85,25 @@ export default function Schedule() {
     return (
         <div className="schedule-container">
             <Menu>
-                <ViewToggle
-                    view={viewType}
-                    onChange={(view) => dispatch(setViewType(view))}
-                />
-                <ThemeToggle />
-                <NavigationBar
-                    currentDate={currentDate}
-                    view={viewType}
-                    onPrev={goPrev}
-                    onNext={goNext}
-                />
-                <div className="flex gap-4">
+                <div className="flex items-center gap-3 order-1">
+                    <ViewToggle
+                        view={viewType}
+                        onChange={(view) => dispatch(setViewType(view))}
+                    />
+                    <ThemeToggle />
+                </div>
+                <div className="order-3 md:order-2 w-full md:w-auto md:flex-1">
+                    <NavigationBar
+                        currentDate={currentDate}
+                        view={viewType}
+                        onPrev={goPrev}
+                        onNext={goNext}
+                    />
+                </div>
+                <div className="flex gap-2 order-2 md:order-3">
                     <button
                         onClick={goToday}
-                        className="add-event-button mr-8"
+                        className="add-event-button"
                     >
                         Today
                     </button>
@@ -115,7 +120,8 @@ export default function Schedule() {
             <div className="week-header">
                 {week.map((item: string, index: number) => (
                     <div key={index} className="w-full">
-                        {item}
+                        <span className="hidden md:inline">{item}</span>
+                        <span className="md:hidden">{weekShort[index]}</span>
                     </div>
                 ))}
             </div>

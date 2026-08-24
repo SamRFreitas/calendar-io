@@ -13,16 +13,18 @@ export default function WeekView({ currentDate, onEventClick, onDayClick }: Week
     const days = buildWeekDays(currentDate)
 
     return (
-        <div className="grid grid-cols-7 gap-1">
-            {days.map((day, index) => (
-                <Day
-                    key={index}
-                    day={day}
-                    view="week"
-                    onEventClick={onEventClick}
-                    onDayClick={onDayClick}
-                />
-            ))}
+        <div className="@container">
+            <div className="grid grid-cols-7 gap-0.5 md:gap-1">
+                {days.map((day, index) => (
+                    <Day
+                        key={index}
+                        day={day}
+                        view="week"
+                        onEventClick={onEventClick}
+                        onDayClick={onDayClick}
+                    />
+                ))}
+            </div>
         </div>
     )
 }

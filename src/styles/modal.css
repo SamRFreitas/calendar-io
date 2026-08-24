@@ -1,11 +1,11 @@
 @utility modal-overlay {
-    @apply fixed inset-0 flex items-center justify-center bg-black/50 z-50;
+    @apply fixed inset-0 flex items-center justify-center bg-black/50 z-50 p-4;
 }
 
 @utility modal-content {
-    @apply bg-card rounded-lg shadow-lg max-w-md w-full p-8 relative;
+    @apply bg-card rounded-lg shadow-lg max-w-md w-full max-h-[90dvh] overflow-y-auto p-6 md:p-8 relative;
 }
 
 @utility modal-close-button {
-    @apply absolute top-4 right-4 text-muted-foreground hover:text-foreground text-2xl cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+    @apply absolute top-2 right-2 md:top-4 md:right-4 w-11 h-11 flex items-center justify-center text-muted-foreground hover:text-foreground text-2xl cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
 }

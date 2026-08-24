@@ -27,13 +27,13 @@
 }
 
 @utility form-button-cancel {
-    @apply px-4 py-2 bg-muted text-muted-foreground rounded-md hover:bg-border transition-colors text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+    @apply px-4 py-3 min-h-11 bg-muted text-muted-foreground rounded-md hover:bg-border transition-colors text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
 }
 
 @utility form-button-submit {
-    @apply px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-hover transition-colors text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+    @apply px-4 py-3 min-h-11 bg-primary text-white rounded-md hover:bg-primary-hover transition-colors text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
 }
 
 @utility form-button-delete {
-    @apply w-full px-4 py-2 bg-destructive text-white rounded-md hover:bg-destructive/90 transition-colors text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+    @apply w-full px-4 py-3 min-h-11 bg-destructive text-white rounded-md hover:bg-destructive/90 transition-colors text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
 }

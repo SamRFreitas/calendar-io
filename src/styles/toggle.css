@@ -7,7 +7,7 @@
 }
 
 @utility view-toggle-button {
-    @apply px-5 py-2 rounded-md text-lg font-bold transition-colors bg-transparent text-muted-foreground hover:text-foreground cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+    @apply px-4 py-2.5 min-h-11 rounded-md text-base md:text-lg md:px-5 font-bold transition-colors bg-transparent text-muted-foreground hover:text-foreground cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
 }
 
 @utility view-toggle-button-active {
@@ -15,7 +15,7 @@
 }
 
 @utility nav-button {
-    @apply px-4 py-1.5 rounded-md bg-card hover:bg-border transition-colors text-lg font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+    @apply px-4 py-2.5 min-h-11 min-w-11 flex items-center justify-center rounded-md bg-card hover:bg-border transition-colors text-lg font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
 }
 
 @utility nav-button-today {
