@@ -17,13 +17,8 @@ const typeColorClass = {
     task: 'event-task',
 }
 
-const getEventClasses = (event: Event) => {
-    const baseClasses = `event-badge event-badge-hover ${typeColorClass[event.type]}`
-    if (event.allDay) {
-        return `${baseClasses} multi-day`
-    }
-    return baseClasses
-}
+const getEventClasses = (event: Event) =>
+    `event-badge event-badge-hover ${typeColorClass[event.type]}`
 
 export default function Day({ day, view, onEventClick, onDayClick }: DayProps) {
     const dateStr = day.date.format('YYYY-MM-DD')
