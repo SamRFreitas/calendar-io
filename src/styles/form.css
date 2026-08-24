@@ -11,15 +11,19 @@
 }
 
 @utility form-label {
-    @apply block text-sm font-medium text-gray-700;
+    @apply block text-sm font-medium text-muted-foreground;
 }
 
 @utility form-input {
-    @apply w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+    @apply w-full border border-border rounded-md px-3 py-2 text-sm bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
 }
 
 @utility form-select {
-    @apply w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white;
+    @apply w-full border border-border rounded-md px-3 py-2 text-sm bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
+}
+
+@utility form-checkbox {
+    accent-color: var(--color-primary);
 }
 
 @utility form-actions {
@@ -27,9 +31,13 @@
 }
 
 @utility form-button-cancel {
-    @apply px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors text-sm font-medium cursor-pointer;
+    @apply px-4 py-2 bg-muted text-muted-foreground rounded-md hover:bg-border transition-colors text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
 }
 
 @utility form-button-submit {
-    @apply px-4 py-2 bg-primary text-white rounded-md hover:bg-gray-800 transition-colors text-sm font-medium cursor-pointer;
+    @apply px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-hover transition-colors text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+}
+
+@utility form-button-delete {
+    @apply w-full px-4 py-2 bg-destructive text-white rounded-md hover:bg-destructive/90 transition-colors text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
 }
