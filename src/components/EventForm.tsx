@@ -24,9 +24,6 @@ export default function EventForm({ event, onClose, startDate: propStartDate, en
 
     const [name, setName] = useState(event?.name || '')
     const [type, setType] = useState<Event['type']>(event?.type || 'meeting')
-    const [allDay, setAllDay] = useState(
-        event?.allDay || false
-    )
     const [startDate, setStartDate] = useState(
         event?.startDate?.slice(0, 16) || propStartDate || minDate
     )
@@ -71,13 +68,8 @@ export default function EventForm({ event, onClose, startDate: propStartDate, en
     const handleSave = () => {
         if (!validateEvent()) return
 
-        // Format dates: if allDay, ensure YYYY-MM-DD format for ISO storage
-        const formattedStartDate = allDay
-            ? dayjs(startDate).startOf('day').format('YYYY-MM-DDTHH:mm')
-            : startDate
-        const formattedEndDate = allDay
-            ? dayjs(endDate).endOf('day').format('YYYY-MM-DDTHH:mm')
-            : endDate
+        const formattedStartDate = startDate
+        const formattedEndDate = endDate
 
         if (isEditing && event) {
             const updatedEvent: Event = {
@@ -144,49 +136,27 @@ export default function EventForm({ event, onClose, startDate: propStartDate, en
             </div>
 
             <div className="form-field">
-                <label className="form-label">
-                    <input
-                        type="checkbox"
-                        checked={allDay}
-                        onChange={() => setAllDay(!allDay)}
-                        className="form-checkbox"
-                    />
-                    All day
-                </label>
-            </div>
-
-            <div className="form-field">
                 <label className="form-label">Start</label>
                 <input
-                    type={allDay ? 'date' : 'datetime-local'}
+                    type="datetime-local"
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
                     className="form-input"
-                    min={allDay ? now.format('YYYY-MM-DD') : minDate}
+                    min={minDate}
                     data-testid="event-start"
                 />
-                {allDay && (
-                    <p className="text-xs text-muted-foreground mt-1">
-                        Select dates (not times)
-                    </p>
-                )}
             </div>
 
             <div className="form-field">
                 <label className="form-label">End</label>
                 <input
-                    type={allDay ? 'date' : 'datetime-local'}
+                    type="datetime-local"
                     value={endDate}
                     onChange={(e) => setEndDate(e.target.value)}
                     className="form-input"
-                    min={allDay ? startDate || now.format('YYYY-MM-DD') : startDate || minDate}
+                    min={startDate || minDate}
                     data-testid="event-end"
                 />
-                {allDay && (
-                    <p className="text-xs text-muted-foreground mt-1">
-                        Select dates (not times)
-                    </p>
-                )}
             </div>
 
             <div className="flex flex-col gap-2 mt-4">
