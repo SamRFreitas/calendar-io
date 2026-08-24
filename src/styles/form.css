@@ -22,10 +22,6 @@
     @apply w-full border border-border rounded-md px-3 py-2 text-sm bg-card text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent;
 }
 
-@utility form-checkbox {
-    accent-color: var(--color-primary);
-}
-
 @utility form-actions {
     @apply flex justify-end gap-2 mt-6;
 }
