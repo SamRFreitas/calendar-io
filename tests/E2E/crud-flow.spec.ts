@@ -132,7 +132,7 @@ test.describe('Calendar E2E', () => {
         await page.click('[data-testid="event-save"]')
 
         
-        await expect(page.locator('text=This time slot conflicts with an existing event')).toBeVisible({ timeout: 5000 })
+        await expect(page.locator('text=Conflicts with "First Event"')).toBeVisible({ timeout: 5000 })
     })
     
 })

@@ -50,15 +50,17 @@ export default function EventForm({ event, onClose, startDate: propStartDate, en
             return false
         }
 
-        const hasConflict = existingEvents.some((e: Event) => {
+        const conflictingEvent = existingEvents.find((e: Event) => {
             if (isEditing && e.id === event?.id) return false
             const eStart = dayjs(e.startDate)
             const eEnd = dayjs(e.endDate)
             return start.isBefore(eEnd) && end.isAfter(eStart)
         })
 
-        if (hasConflict) {
-            toast.error('This time slot conflicts with an existing event')
+        if (conflictingEvent) {
+            toast.error(
+                `Conflicts with "${conflictingEvent.name}" (${dayjs(conflictingEvent.startDate).format('HH:mm')}–${dayjs(conflictingEvent.endDate).format('HH:mm')})`
+            )
             return false
         }
 
