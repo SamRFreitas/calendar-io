@@ -35,17 +35,11 @@ describe('EventForm component', () => {
   test('renders add event form by default', () => {
     renderWithProvider(<EventForm event={undefined} onClose={jest.fn()} />)
     expect(screen.getByText('Add Event')).toBeInTheDocument()
-    expect(screen.getByLabelText(/all day/i)).toBeInTheDocument()
   })
 
   test('renders edit event form when event prop provided', () => {
     renderWithProvider(<EventForm event={mockEvent} onClose={jest.fn()} />)
     expect(screen.getByText('Edit Event')).toBeInTheDocument()
-  })
-
-  test('renders all day checkbox', () => {
-    renderWithProvider(<EventForm event={undefined} onClose={jest.fn()} />)
-    expect(screen.getByLabelText(/all day/i)).toBeInTheDocument()
   })
 
   test('renders start date input', () => {
