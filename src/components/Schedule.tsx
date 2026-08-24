@@ -5,6 +5,7 @@ import { setViewType, setCurrentDate as uiSetCurrentDate, openModal, closeModal,
 import { type RootState } from '@/store/index'
 import Menu from './Menu'
 import ViewToggle from './ViewToggle'
+import ThemeToggle from './ThemeToggle'
 import NavigationBar from './NavigationBar'
 import MonthView from './MonthView'
 import WeekView from './WeekView'
@@ -86,13 +87,14 @@ export default function Schedule() {
                     view={viewType}
                     onChange={(view) => dispatch(setViewType(view))}
                 />
+                <ThemeToggle />
                 <NavigationBar
                     currentDate={currentDate}
                     view={viewType}
                     onPrev={goPrev}
                     onNext={goNext}
                 />
-                <div className="flex justify-end w-full">
+                <div className="flex gap-4">
                     <button
                         onClick={goToday}
                         className="add-event-button mr-8"
