@@ -22,10 +22,8 @@ export default function EventForm({ event, onClose }: EventFormProps) {
     const now = dayjs()
     const minDate = now.format('YYYY-MM-DDTHH:mm')
 
-    const base =
-        !isEditing && newEventDate && dayjs(newEventDate).isAfter(now, 'day')
-            ? dayjs(newEventDate).startOf('day')
-            : now
+    const target = newEventDate ? dayjs(newEventDate) : null
+    const base = !isEditing && target && target.isAfter(now) ? target : now
 
     const [name, setName] = useState(event?.name || '')
     const [type, setType] = useState<Event['type']>(event?.type || 'meeting')
@@ -45,7 +43,8 @@ export default function EventForm({ event, onClose }: EventFormProps) {
         const start = dayjs(startDate)
         const end = dayjs(endDate)
 
-        if (start.isBefore(now)) {
+        const startChanged = !isEditing || !event || start.valueOf() !== dayjs(event.startDate).valueOf()
+        if (start.isBefore(now) && startChanged) {
             toast.error('Cannot create an event in the past')
             return false
         }
@@ -149,7 +148,7 @@ export default function EventForm({ event, onClose }: EventFormProps) {
                     value={startDate}
                     onChange={(e) => setStartDate(e.target.value)}
                     className="form-input"
-                    min={minDate}
+                    min={isEditing ? undefined : minDate}
                     data-testid="event-start"
                 />
             </div>

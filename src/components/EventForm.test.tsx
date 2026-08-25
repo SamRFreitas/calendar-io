@@ -114,6 +114,18 @@ describe('EventForm component', () => {
     expect(screen.getByText('Edit Event')).toBeInTheDocument()
   })
 
+  test('start input has no min constraint when editing (past events must stay editable)', () => {
+    renderWithProvider(<EventForm event={mockEvent} onClose={jest.fn()} />)
+    const startInput = screen.getByTestId('event-start')
+    expect(startInput).not.toHaveAttribute('min')
+  })
+
+  test('start input keeps a "now" min constraint when creating', () => {
+    renderWithProvider(<EventForm event={undefined} onClose={jest.fn()} />)
+    const startInput = screen.getByTestId('event-start')
+    expect(startInput).toHaveAttribute('min')
+  })
+
   test('defaults start to now and end to start+1h when creating with no newEventDate', () => {
     renderWithProvider(<EventForm event={undefined} onClose={jest.fn()} />, null)
     const startValue = (screen.getByTestId('event-start') as HTMLInputElement).value
@@ -137,6 +149,23 @@ describe('EventForm component', () => {
     const startValue = (screen.getByTestId('event-start') as HTMLInputElement).value
     expect(startValue.slice(0, 10)).toBe(todayDate)
     expect(startValue.endsWith('T00:00')).toBe(false)
+  })
+
+  test('uses the exact hour from newEventDate when it is later today (grid cell click)', () => {
+    const futureHour = dayjs().add(2, 'hour').minute(0).second(0).format('YYYY-MM-DDTHH:mm')
+    renderWithProvider(<EventForm event={undefined} onClose={jest.fn()} />, futureHour)
+    const startValue = (screen.getByTestId('event-start') as HTMLInputElement).value
+    const endValue = (screen.getByTestId('event-end') as HTMLInputElement).value
+    expect(startValue).toBe(futureHour)
+    expect(dayjs(endValue).diff(dayjs(startValue), 'minute')).toBe(60)
+  })
+
+  test('falls back to now when newEventDate is an hour already in the past today', () => {
+    const pastHour = dayjs().subtract(2, 'hour').minute(0).second(0).format('YYYY-MM-DDTHH:mm')
+    renderWithProvider(<EventForm event={undefined} onClose={jest.fn()} />, pastHour)
+    const startValue = (screen.getByTestId('event-start') as HTMLInputElement).value
+    expect(startValue).not.toBe(pastHour)
+    expect(startValue.slice(0, 10)).toBe(dayjs().format('YYYY-MM-DD'))
   })
 
   test('ignores newEventDate when editing an existing event', () => {
