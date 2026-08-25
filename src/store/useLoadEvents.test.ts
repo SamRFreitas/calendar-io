@@ -1,4 +1,4 @@
-import { renderHook, waitFor } from '@testing-library/react'
+import { act, renderHook, waitFor } from '@testing-library/react'
 import { useLoadEvents } from './useLoadEvents'
 import { addEvent } from './eventsSlice'
 import { type Event } from '../types/event'
@@ -84,5 +84,40 @@ describe('useLoadEvents', () => {
         })
 
         expect(mockDispatch).not.toHaveBeenCalled()
+    })
+
+    it('retry re-runs the fetch and recovers from a previous failure', async () => {
+        const mockEvent: Event = {
+            id: '1',
+            type: 'meeting',
+            name: 'Event 1',
+            startDate: '2026-06-22T09:00:00',
+            endDate: '2026-06-22T09:30:00',
+        }
+
+        ;(window.fetch as jest.Mock)
+            .mockRejectedValueOnce(new Error('Network error'))
+            .mockResolvedValueOnce({
+                ok: true,
+                json: jest.fn().mockResolvedValueOnce([mockEvent]),
+            })
+
+        const { result } = renderHook(() => useLoadEvents())
+
+        await waitFor(() => {
+            expect(result.current.hasError).toBe(true)
+        })
+
+        await act(async () => {
+            await result.current.retry()
+        })
+
+        await waitFor(() => {
+            expect(result.current.hasError).toBe(false)
+            expect(result.current.loading).toBe(false)
+        })
+
+        expect(window.fetch).toHaveBeenCalledTimes(2)
+        expect(mockDispatch).toHaveBeenCalledWith(addEvent(mockEvent))
     })
 })

@@ -160,12 +160,9 @@ npx playwright test --headed
 - **Impact**: Some components may be over-connected to the store, and selectors could be better optimized.
 - **Goal**: With more experience or mentorship from a Senior React Engineer, I would refactor the state layer to be more predictable and maintainable.
 
-#### JSON Data Loading
+#### ~~JSON Data Loading~~ — Resolved
 
-- **Limitation**: The approach used to load the `events.json` file via `fetch` may not follow best practices for production applications. There's actually a half-built attempt at date-keyed caching in `useLoadEvents` (a `Map` ref + a 5-minute staleness check) — but the `shouldRefresh` value it computes is never read anywhere, so it doesn't actually do anything yet. Retrying after a failed load reloads the whole page rather than re-running just the fetch, and there's no React error boundary, only manual error state.
-- **Why**: The current implementation is functional but does not handle advanced scenarios like real caching, retries, or error boundaries.
-- **Impact**: While it works for this challenge, it may not be robust enough for a production environment.
-- **Goal**: Wire up the existing cache check (or remove it if it's not worth keeping), retry just the fetch instead of reloading the page, and add a real error boundary.
+The dead `shouldRefresh`/date-keyed cache in `useLoadEvents` is gone — it was leftover scaffolding for "refetch a changing API," which never fit an app whose event source is a static bundled JSON file, so building it out further would have been solving a problem this app doesn't have. `retry` now re-runs just the fetch instead of reloading the whole page (and no longer snaps the calendar back to today's month as a reload would), and a real `ErrorBoundary` now sits above `Schedule` for unexpected render errors, separate from the existing "events failed to load" state.
 
 #### ~~Responsiveness~~ — Resolved
 
@@ -183,19 +180,15 @@ Clicking a calendar day (or an hour cell in Week View) opens the event form with
 - Support events that span multiple days (e.g., startDate on one day, endDate on a later day) fully, in both views.
 - Display these events visually across the corresponding days in both month and week views.
 
-#### Improve Data Loading
+#### ~~Improve Data Loading~~ — Done
 
-- Wire up (or remove) the dead `shouldRefresh` cache check in `useLoadEvents` — see "JSON Data Loading" above.
-- Implement a real error boundary instead of manual error state.
-- Add loading states and skeleton screens for a smoother UX (today it's just a "Loading events..." message).
+See "JSON Data Loading" above for the cache/retry/error boundary fixes. The loading state is now a skeleton that mirrors the toolbar and month grid shape instead of a plain "Loading events..." message.
 
 #### Expand Test Coverage
 
 - **Status**: Mostly done — `Day`, `WeekView`, `EventForm`, and `DayEventsList` now have real React Testing Library component tests, not just utility-function tests.
 - Still missing: edge cases like invalid date inputs, duplicate event IDs, and large datasets.
 
-#### Custom Hooks for Reusability
+#### ~~Custom Hooks for Reusability~~ — Not planned
 
-- Extract reusable logic (e.g., event filtering, date navigation) into custom hooks.
-- Improve separation of concerns by moving business logic out of UI components.
-- Make the codebase easier to test and maintain.
+Deliberately leaving this one alone rather than extracting hooks speculatively. Event filtering is already a selector (`selectEventsByDate`), not logic buried in a component, and date navigation is a handful of one-line dispatchers in `Schedule.tsx` — there isn't a second caller anywhere that would justify pulling either behind a hook. This exact kind of extraction was actually tried twice before in this repo (`useCalendarNavigation`, `useEventsForDay`) and both were removed as unused. Revisit only if a real second use case shows up, not preemptively.

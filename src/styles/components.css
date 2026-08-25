@@ -38,12 +38,8 @@
   @apply grid grid-cols-7 text-center mt-8 bg-primary text-white font-bold rounded-t-lg text-sm md:text-lg py-2 md:py-4;
 }
 
-@utility loading-screen {
-  @apply flex items-center justify-center h-screen;
-}
-
-@utility loading-text {
-  @apply text-lg text-muted-foreground;
+@utility skeleton-block {
+  @apply animate-pulse bg-muted rounded-md;
 }
 
 @utility error-screen {

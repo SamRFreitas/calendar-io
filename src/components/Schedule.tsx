@@ -28,7 +28,7 @@ export default function Schedule() {
     const week = dayjs.localeData().weekdays()
     const weekShort = dayjs.localeData().weekdaysMin()
 
-    const { loading, error, hasError } = useLoadEvents()
+    const { loading, error, hasError, retry } = useLoadEvents()
 
     const handleEventClick = (event: Event) => {
         dispatch(setEditingEvent(event))
@@ -65,8 +65,17 @@ export default function Schedule() {
 
     if (loading) {
         return (
-            <div className="loading-screen">
-                <p className="loading-text">Loading events...</p>
+            <div className="schedule-container" aria-busy="true" aria-label="Loading calendar">
+                <div className="menu-container">
+                    <div className="skeleton-block h-11 w-40" />
+                    <div className="skeleton-block h-11 w-56" />
+                    <div className="skeleton-block h-11 w-40" />
+                </div>
+                <div className="grid grid-cols-7 gap-0.5 md:gap-1 mt-8">
+                    {Array.from({ length: 35 }).map((_, i) => (
+                        <div key={i} className="skeleton-block aspect-square md:min-h-24" />
+                    ))}
+                </div>
             </div>
         )
     }
@@ -75,10 +84,7 @@ export default function Schedule() {
         return (
             <div className="error-screen">
                 <p className="error-text">Error loading events: {error}</p>
-                <button
-                    onClick={() => window.location.reload()}
-                    className="retry-button"
-                >
+                <button onClick={retry} className="retry-button">
                     Retry
                 </button>
             </div>
