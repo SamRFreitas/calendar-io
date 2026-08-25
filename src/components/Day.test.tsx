@@ -198,4 +198,103 @@ describe('Day component', () => {
     const dayElement = container.querySelector('.calendar-day')
     expect(dayElement?.classList).not.toContain('calendar-day-hover')
   })
+
+  describe('on mobile widths', () => {
+    const originalInnerWidth = window.innerWidth
+
+    beforeEach(() => {
+      window.innerWidth = 375
+    })
+
+    afterEach(() => {
+      window.innerWidth = originalInnerWidth
+    })
+
+    test('tapping a past day does nothing, same as on desktop', () => {
+      const onDayClick = jest.fn()
+      const onShowMore = jest.fn()
+      const pastDayProps = {
+        day: {
+          date: dayjs().subtract(1, 'day'),
+          dayOfMonth: dayjs().subtract(1, 'day').date(),
+          isCurrentMonth: true,
+        } as const,
+        view: 'month' as ScheduleType,
+        onEventClick: jest.fn(),
+        onDayClick,
+        onShowMore,
+      }
+      const { container } = renderDay(pastDayProps)
+      const dayElement = container.querySelector('.calendar-day')
+      dayElement?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+
+      expect(onShowMore).not.toHaveBeenCalled()
+      expect(onDayClick).not.toHaveBeenCalled()
+    })
+
+    test('tapping a past day that has events still opens the day list (events stay reachable)', () => {
+      const onDayClick = jest.fn()
+      const onShowMore = jest.fn()
+      const pastDate = dayjs().subtract(1, 'day')
+      const pastEvent: Event = {
+        id: 'evt-past',
+        type: 'meeting',
+        name: 'Old briefing',
+        startDate: pastDate.format('YYYY-MM-DD') + 'T09:00:00',
+        endDate: pastDate.format('YYYY-MM-DD') + 'T09:30:00',
+      }
+      const pastDayProps = {
+        day: {
+          date: pastDate,
+          dayOfMonth: pastDate.date(),
+          isCurrentMonth: true,
+        } as const,
+        view: 'month' as ScheduleType,
+        onEventClick: jest.fn(),
+        onDayClick,
+        onShowMore,
+      }
+      const { container } = renderDay(pastDayProps, [pastEvent])
+      const dayElement = container.querySelector('.calendar-day')
+      dayElement?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+
+      expect(onShowMore).toHaveBeenCalledTimes(1)
+      expect(onDayClick).not.toHaveBeenCalled()
+    })
+
+    test('tapping a future day opens the day list instead of the create form', () => {
+      const onDayClick = jest.fn()
+      const onShowMore = jest.fn()
+      const futureDayProps = {
+        day: {
+          date: dayjs().add(3, 'day'),
+          dayOfMonth: dayjs().add(3, 'day').date(),
+          isCurrentMonth: true,
+        } as const,
+        view: 'month' as ScheduleType,
+        onEventClick: jest.fn(),
+        onDayClick,
+        onShowMore,
+      }
+      const { container } = renderDay(futureDayProps)
+      const dayElement = container.querySelector('.calendar-day')
+      dayElement?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+
+      expect(onShowMore).toHaveBeenCalledTimes(1)
+      expect(onDayClick).not.toHaveBeenCalled()
+    })
+
+    test('renders up to 4 event dots plus an overflow count', () => {
+      const events: Event[] = Array.from({ length: 5 }, (_, i) => ({
+        id: `evt-${i}`,
+        type: i % 2 === 0 ? 'meeting' : 'task',
+        name: `Event ${i}`,
+        startDate: `2026-06-15T0${i}:00:00`,
+        endDate: `2026-06-15T0${i}:30:00`,
+      }))
+      const { container } = renderDay({}, events)
+      expect(container.querySelectorAll('.event-dot')).toHaveLength(4)
+      expect(container.textContent).toContain('+1')
+    })
+  })
 })

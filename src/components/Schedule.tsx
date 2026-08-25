@@ -96,7 +96,7 @@ export default function Schedule() {
     return (
         <div className="schedule-container">
             <Menu>
-                <div className="flex items-center gap-3 order-1">
+                <div className="flex flex-wrap items-center gap-3 order-1">
                     <ViewToggle
                         view={viewType}
                         onChange={(view) => dispatch(setViewType(view))}

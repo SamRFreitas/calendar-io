@@ -22,6 +22,10 @@
     @apply bg-warning;
 }
 
+@utility event-dot {
+    @apply w-1.5 h-1.5 rounded-full;
+}
+
 @utility menu-container {
   @apply flex flex-wrap items-center justify-between gap-3 p-3 md:gap-4 md:p-4 bg-primary rounded-xl shadow-sm mb-6;
 }

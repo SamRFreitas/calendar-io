@@ -22,6 +22,7 @@ const getEventClasses = (event: Event) =>
     `event-badge event-badge-hover ${typeColorClass[event.type]}`
 
 const MAX_VISIBLE_EVENTS = 2
+const MAX_VISIBLE_DOTS = 4
 
 export default function Day({ day, view, onEventClick, onDayClick, onShowMore }: DayProps) {
     const dateStr = day.date.format('YYYY-MM-DD')
@@ -57,6 +58,15 @@ export default function Day({ day, view, onEventClick, onDayClick, onShowMore }:
     }
 
     const handleDayClick = () => {
+        if (window.innerWidth < 768) {
+            // A past day with events is still viewable/editable (same as its
+            // individual event badges already are on desktop); an empty past
+            // day has nothing to show and isn't a valid place to create one.
+            if (sortedEvents.length > 0 || isClickable) {
+                onShowMore?.(day.date)
+            }
+            return
+        }
         if (isClickable && onDayClick) {
             onDayClick(day.date)
         }
@@ -86,7 +96,7 @@ export default function Day({ day, view, onEventClick, onDayClick, onShowMore }:
                 )}
             </div>
 
-            <div className="absolute bottom-1 md:bottom-2 left-1 md:left-2 right-1 md:right-2 flex flex-col gap-1 text-xs">
+            <div className="absolute bottom-1 md:bottom-2 left-1 md:left-2 right-1 md:right-2 hidden md:flex flex-col gap-1 text-xs">
                 {visibleEvents.map((event: Event) => (
                     <div
                         key={event.id}
@@ -106,6 +116,19 @@ export default function Day({ day, view, onEventClick, onDayClick, onShowMore }:
                     </div>
                 )}
             </div>
+
+            {sortedEvents.length > 0 && (
+                <div className="absolute bottom-1 left-1 right-1 flex md:hidden items-center justify-center gap-0.5">
+                    {sortedEvents.slice(0, MAX_VISIBLE_DOTS).map((event: Event) => (
+                        <span key={event.id} className={`event-dot ${typeColorClass[event.type]}`} />
+                    ))}
+                    {sortedEvents.length > MAX_VISIBLE_DOTS && (
+                        <span className="text-[9px] text-muted-foreground leading-none">
+                            +{sortedEvents.length - MAX_VISIBLE_DOTS}
+                        </span>
+                    )}
+                </div>
+            )}
         </div>
     )
 }

@@ -33,3 +33,11 @@
 @utility week-grid-day-column {
     @apply relative border-l border-border h-[960px] md:h-[1152px];
 }
+
+@utility week-day-chip {
+    @apply flex-1 min-h-11 flex flex-col items-center justify-center gap-0.5 rounded-md bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+}
+
+@utility week-day-chip-active {
+    @apply bg-primary text-white hover:text-white;
+}

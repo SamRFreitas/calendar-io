@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
-import { buildWeekDays } from '@/utils'
+import { buildWeekDays, getStartOfWeek } from '@/utils'
 import { getEventSegmentForDay } from '@/utils/dateHelpers'
 import { useAppSelector } from '@/store/hooks'
 import { selectEventsByDate } from '@/store/eventsSlice'
@@ -23,16 +23,17 @@ const typeColorClass: Record<Event['type'], string> = {
 interface WeekDayColumnProps {
     day: Day
     now: dayjs.Dayjs
+    isSelected: boolean
     onEventClick: (event: Event) => void
     onCellClick: (date: dayjs.Dayjs, hour: number) => void
 }
 
-function WeekDayColumn({ day, now, onEventClick, onCellClick }: WeekDayColumnProps) {
+function WeekDayColumn({ day, now, isSelected, onEventClick, onCellClick }: WeekDayColumnProps) {
     const dateStr = day.date.format('YYYY-MM-DD')
     const events = useAppSelector(selectEventsByDate(dateStr))
 
     return (
-        <div className="week-grid-day-column">
+        <div className={`week-grid-day-column ${isSelected ? 'block' : 'hidden'} md:block`}>
             {HOURS.map((hour) => {
                 const isCellPast = day.date.hour(hour).isBefore(now, 'hour')
                 return (
@@ -71,18 +72,31 @@ function WeekDayColumn({ day, now, onEventClick, onCellClick }: WeekDayColumnPro
 export default function WeekView({ currentDate, onEventClick, onCellClick }: WeekViewProps) {
     const days = buildWeekDays(currentDate)
     const [now, setNow] = useState(dayjs())
+    const defaultDayIndex = () => {
+        const todayIndex = days.findIndex((day) => day.isToday)
+        return todayIndex >= 0 ? todayIndex : 0
+    }
+    const [selectedDayIndex, setSelectedDayIndex] = useState(defaultDayIndex)
 
     useEffect(() => {
         const interval = setInterval(() => setNow(dayjs()), 60000)
         return () => clearInterval(interval)
     }, [])
 
-    const showCurrentTime = days.some((day) => day.isToday)
+    const weekKey = getStartOfWeek(currentDate).format('YYYY-MM-DD')
+    const [lastWeekKey, setLastWeekKey] = useState(weekKey)
+    if (weekKey !== lastWeekKey) {
+        setLastWeekKey(weekKey)
+        setSelectedDayIndex(defaultDayIndex())
+    }
+
+    const showCurrentTimeDesktop = days.some((day) => day.isToday)
+    const showCurrentTimeMobile = days[selectedDayIndex]?.isToday ?? false
     const nowPercent = ((now.hour() * 60 + now.minute()) / 1440) * 100
 
     return (
         <div>
-            <div className="flex">
+            <div className="hidden md:flex">
                 <div className="week-grid-gutter" />
                 <div className="grid grid-cols-7 flex-1">
                     {days.map((day, index) => (
@@ -95,6 +109,21 @@ export default function WeekView({ currentDate, onEventClick, onCellClick }: Wee
                 </div>
             </div>
 
+            <div className="flex md:hidden gap-1 py-2">
+                {days.map((day, index) => (
+                    <button
+                        key={index}
+                        type="button"
+                        aria-pressed={index === selectedDayIndex}
+                        onClick={() => setSelectedDayIndex(index)}
+                        className={`week-day-chip ${index === selectedDayIndex ? 'week-day-chip-active' : ''}`}
+                    >
+                        <span className="text-[10px] leading-none">{day.date.format('ddd')[0]}</span>
+                        <span className="text-sm font-semibold leading-none">{day.dayOfMonth}</span>
+                    </button>
+                ))}
+            </div>
+
             <div className="max-h-[70vh] overflow-y-auto">
                 <div className="flex">
                     <div className="week-grid-gutter">
@@ -104,19 +133,26 @@ export default function WeekView({ currentDate, onEventClick, onCellClick }: Wee
                             </div>
                         ))}
                     </div>
-                    <div className="relative grid grid-cols-7 flex-1">
+                    <div className="relative grid grid-cols-1 md:grid-cols-7 flex-1">
                         {days.map((day, index) => (
                             <WeekDayColumn
                                 key={index}
                                 day={day}
                                 now={now}
+                                isSelected={index === selectedDayIndex}
                                 onEventClick={onEventClick}
                                 onCellClick={onCellClick}
                             />
                         ))}
-                        {showCurrentTime && (
+                        {showCurrentTimeDesktop && (
                             <div
-                                className="absolute inset-x-0 h-0.5 bg-red-500 pointer-events-none z-10"
+                                className="hidden md:block absolute inset-x-0 h-0.5 bg-red-500 pointer-events-none z-10"
+                                style={{ top: `${nowPercent}%` }}
+                            />
+                        )}
+                        {showCurrentTimeMobile && (
+                            <div
+                                className="md:hidden absolute inset-x-0 h-0.5 bg-red-500 pointer-events-none z-10"
                                 style={{ top: `${nowPercent}%` }}
                             />
                         )}

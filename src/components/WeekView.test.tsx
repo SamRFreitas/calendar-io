@@ -129,4 +129,64 @@ describe('WeekView component', () => {
     const { container } = renderWeek()
     expect(container.querySelector('.bg-red-500')).not.toBeInTheDocument()
   })
+
+  test('renders a mobile day-chip for each day of the week', () => {
+    const { container } = renderWeek()
+    const chips = container.querySelectorAll('.week-day-chip')
+    expect(chips).toHaveLength(7)
+  })
+
+  test('defaults the selected day to today when the visible week contains today', () => {
+    const { container } = render(
+      <Provider store={createMockStore()}>
+        <WeekView currentDate={dayjs()} onEventClick={jest.fn()} onCellClick={jest.fn()} />
+      </Provider>
+    )
+    const todayIndex = dayjs().day()
+    const columns = container.querySelectorAll('.week-grid-day-column')
+    expect(columns[todayIndex].classList).toContain('block')
+    expect(columns[todayIndex].classList).not.toContain('hidden')
+  })
+
+  test('defaults the selected day to Sunday when today is not in the visible week', () => {
+    const { container } = renderWeek()
+    const columns = container.querySelectorAll('.week-grid-day-column')
+    expect(columns[0].classList).toContain('block')
+    expect(columns[0].classList).not.toContain('hidden')
+    expect(columns[1].classList).toContain('hidden')
+  })
+
+  test('clicking a day chip switches which day column is visible on mobile', () => {
+    const { container } = renderWeek()
+    const chips = container.querySelectorAll('.week-day-chip')
+    fireEvent.click(chips[3])
+
+    const columns = container.querySelectorAll('.week-grid-day-column')
+    expect(columns[3].classList).toContain('block')
+    expect(columns[3].classList).not.toContain('hidden')
+    expect(columns[0].classList).toContain('hidden')
+  })
+
+  test('marks the selected day chip as pressed', () => {
+    const { container } = renderWeek()
+    const chips = container.querySelectorAll('.week-day-chip')
+    expect(chips[0].getAttribute('aria-pressed')).toBe('true')
+    expect(chips[1].getAttribute('aria-pressed')).toBe('false')
+  })
+
+  test('shows the mobile current-time line only when the selected day is today', () => {
+    const { container } = render(
+      <Provider store={createMockStore()}>
+        <WeekView currentDate={dayjs()} onEventClick={jest.fn()} onCellClick={jest.fn()} />
+      </Provider>
+    )
+    const mobileLine = container.querySelector('.md\\:hidden.bg-red-500')
+    expect(mobileLine).toBeInTheDocument()
+
+    const chips = container.querySelectorAll('.week-day-chip')
+    const nonTodayIndex = dayjs().day() === 0 ? 1 : 0
+    fireEvent.click(chips[nonTodayIndex])
+
+    expect(container.querySelector('.md\\:hidden.bg-red-500')).not.toBeInTheDocument()
+  })
 })
