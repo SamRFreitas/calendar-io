@@ -142,4 +142,60 @@ describe('Day component', () => {
     expect(dayElement?.classList).toContain('bg-muted')
     expect(dayElement?.classList).toContain('text-muted-foreground')
   })
+
+  test('applies hover affordance and fires onDayClick for a future, current-month day', () => {
+    const onDayClick = jest.fn()
+    const futureDayProps = {
+      day: {
+        date: dayjs().add(3, 'day'),
+        dayOfMonth: dayjs().add(3, 'day').date(),
+        isCurrentMonth: true,
+      } as const,
+      view: 'month' as ScheduleType,
+      onEventClick: jest.fn(),
+      onDayClick,
+    }
+    const { container } = renderDay(futureDayProps)
+    const dayElement = container.querySelector('.calendar-day')
+    expect(dayElement?.classList).toContain('calendar-day-hover')
+
+    dayElement?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    expect(onDayClick).toHaveBeenCalledTimes(1)
+  })
+
+  test('does not apply hover affordance and does not fire onDayClick for a past day', () => {
+    const onDayClick = jest.fn()
+    const pastDayProps = {
+      day: {
+        date: dayjs().subtract(1, 'day'),
+        dayOfMonth: dayjs().subtract(1, 'day').date(),
+        isCurrentMonth: true,
+      } as const,
+      view: 'month' as ScheduleType,
+      onEventClick: jest.fn(),
+      onDayClick,
+    }
+    const { container } = renderDay(pastDayProps)
+    const dayElement = container.querySelector('.calendar-day')
+    expect(dayElement?.classList).not.toContain('calendar-day-hover')
+
+    dayElement?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+    expect(onDayClick).not.toHaveBeenCalled()
+  })
+
+  test('does not apply hover affordance for an other-month day', () => {
+    const dayProps = {
+      day: {
+        date: dayjs('2026-05-31'),
+        dayOfMonth: 31,
+        isCurrentMonth: false,
+      } as const,
+      view: 'month' as ScheduleType,
+      onEventClick: jest.fn(),
+      onDayClick: jest.fn(),
+    }
+    const { container } = renderDay(dayProps)
+    const dayElement = container.querySelector('.calendar-day')
+    expect(dayElement?.classList).not.toContain('calendar-day-hover')
+  })
 })

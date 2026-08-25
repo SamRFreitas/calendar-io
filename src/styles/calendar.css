@@ -11,5 +11,5 @@
 }
 
 @utility calendar-day-hover {
-    @apply hover:bg-muted;
+    @apply hover:bg-muted cursor-pointer;
 }

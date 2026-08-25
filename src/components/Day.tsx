@@ -30,6 +30,7 @@ export default function Day({ day, view, onEventClick, onDayClick, onShowMore }:
     const isOtherMonth = !day.isCurrentMonth
     const isToday = day.isToday ?? false
     const isPast = day.date.isBefore(dayjs(), 'day')
+    const isClickable = !isOtherMonth && !isPast
 
     const sortedEvents = [...events].sort((a, b) =>
         dayjs(a.startDate).diff(dayjs(b.startDate))
@@ -51,8 +52,12 @@ export default function Day({ day, view, onEventClick, onDayClick, onShowMore }:
         className += ' bg-muted text-muted-foreground'
     }
 
+    if (isClickable) {
+        className += ' calendar-day-hover'
+    }
+
     const handleDayClick = () => {
-        if (!isOtherMonth && onDayClick) {
+        if (isClickable && onDayClick) {
             onDayClick(day.date)
         }
     }
