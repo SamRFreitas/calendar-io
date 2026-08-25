@@ -13,3 +13,23 @@
 @utility calendar-day-hover {
     @apply hover:bg-muted cursor-pointer;
 }
+
+@utility week-grid-gutter {
+    @apply w-12 md:w-14 shrink-0 text-[10px] md:text-xs text-muted-foreground text-right pr-2;
+}
+
+@utility week-grid-hour-cell {
+    @apply h-10 md:h-12 border-b border-border transition-colors duration-150;
+}
+
+@utility week-grid-hour-cell-clickable {
+    @apply hover:bg-muted cursor-pointer;
+}
+
+@utility week-grid-hour-cell-past {
+    @apply bg-muted text-muted-foreground cursor-not-allowed;
+}
+
+@utility week-grid-day-column {
+    @apply relative border-l border-border h-[960px] md:h-[1152px];
+}

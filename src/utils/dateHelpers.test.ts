@@ -1,5 +1,6 @@
 import dayjs from 'dayjs'
-import { createDay } from './dateHelpers'
+import { createDay, getEventSegmentForDay } from './dateHelpers'
+import { type Event } from '../types/event'
 
 describe('createDay', () => {
     const june152026 = dayjs('2026-06-15')
@@ -78,5 +79,64 @@ describe('createDay', () => {
             isCurrentMonth: true,
             isToday: true,
         })
+    })
+})
+
+describe('getEventSegmentForDay', () => {
+    const day = dayjs('2026-06-15')
+
+    const makeEvent = (startDate: string, endDate: string): Event => ({
+        id: 'evt-1',
+        type: 'meeting',
+        name: 'Test event',
+        startDate,
+        endDate,
+    })
+
+    test('positions a same-day event by minutes (10:30-11:15 -> 43.75%/3.125%)', () => {
+        const event = makeEvent('2026-06-15T10:30:00', '2026-06-15T11:15:00')
+        const result = getEventSegmentForDay(event, day)
+
+        expect(result).not.toBeNull()
+        expect(result?.topPercent).toBeCloseTo(43.75, 5)
+        expect(result?.heightPercent).toBeCloseTo(3.125, 5)
+        expect(result?.continuesBefore).toBe(false)
+        expect(result?.continuesAfter).toBe(false)
+    })
+
+    test('returns null for an event entirely on another day', () => {
+        const event = makeEvent('2026-06-14T10:00:00', '2026-06-14T11:00:00')
+        expect(getEventSegmentForDay(event, day)).toBeNull()
+    })
+
+    test('clamps a multi-day event to the end of the start day and flags continuesAfter', () => {
+        const event = makeEvent('2026-06-15T22:00:00', '2026-06-16T02:00:00')
+        const result = getEventSegmentForDay(event, day)
+
+        expect(result).not.toBeNull()
+        expect(result?.topPercent).toBeCloseTo((22 * 60 / 1440) * 100, 5)
+        expect(result?.continuesAfter).toBe(true)
+        expect(result?.continuesBefore).toBe(false)
+        // segment runs from 22:00 to end of day (23:59:59.999) - just under 2h
+        expect(result?.heightPercent).toBeGreaterThan(8)
+        expect(result?.heightPercent).toBeLessThan(8.5)
+    })
+
+    test('clamps a multi-day event to the start of the end day and flags continuesBefore', () => {
+        const event = makeEvent('2026-06-14T22:00:00', '2026-06-15T02:00:00')
+        const result = getEventSegmentForDay(event, day)
+
+        expect(result).not.toBeNull()
+        expect(result?.topPercent).toBe(0)
+        expect(result?.continuesBefore).toBe(true)
+        expect(result?.continuesAfter).toBe(false)
+        expect(result?.heightPercent).toBeCloseTo((2 * 60 / 1440) * 100, 5)
+    })
+
+    test('enforces a minimum height for very short events', () => {
+        const event = makeEvent('2026-06-15T09:00:00', '2026-06-15T09:02:00')
+        const result = getEventSegmentForDay(event, day)
+
+        expect(result?.heightPercent).toBe(1.5)
     })
 })

@@ -49,7 +49,7 @@ export default function Day({ day, view, onEventClick, onDayClick, onShowMore }:
     }
 
     if (isPast && !isOtherMonth && !isToday) {
-        className += ' bg-muted text-muted-foreground'
+        className += ' bg-muted text-muted-foreground cursor-not-allowed'
     }
 
     if (isClickable) {

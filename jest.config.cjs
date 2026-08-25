@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = {
     preset: 'ts-jest',
     testEnvironment: 'jsdom',
@@ -14,6 +16,10 @@ module.exports = {
                     lib: ['ES2023', 'DOM'],
                     module: 'esnext',
                     moduleResolution: 'bundler',
+                    baseUrl: '.',
+                    paths: {
+                        '@/*': [path.join(__dirname, 'src/*')],
+                    },
                     esModuleInterop: true,
                     skipLibCheck: true,
                     allowImportingTsExtensions: true,

@@ -43,6 +43,12 @@ export default function Schedule() {
         dispatch(openDayEvents(date.format('YYYY-MM-DD')))
     }
 
+    const handleGridCellClick = (date: dayjs.Dayjs, hour: number) => {
+        const target = date.hour(hour).minute(0).second(0).millisecond(0)
+        dispatch(uiSetCurrentDate(target.toISOString()))
+        dispatch(openModal(target.format('YYYY-MM-DDTHH:mm')))
+    }
+
     const goPrev = () => {
         const unit = viewType === 'week' ? 'week' : 'month'
         dispatch(uiSetCurrentDate(currentDate.subtract(1, unit).toISOString()))
@@ -122,21 +128,22 @@ export default function Schedule() {
                 </div>
             </Menu>
 
-            <div className="week-header">
-                {week.map((item: string, index: number) => (
-                    <div key={index} className="w-full">
-                        <span className="hidden md:inline">{item}</span>
-                        <span className="md:hidden">{weekShort[index]}</span>
-                    </div>
-                ))}
-            </div>
+            {viewType === 'month' && (
+                <div className="week-header">
+                    {week.map((item: string, index: number) => (
+                        <div key={index} className="w-full">
+                            <span className="hidden md:inline">{item}</span>
+                            <span className="md:hidden">{weekShort[index]}</span>
+                        </div>
+                    ))}
+                </div>
+            )}
 
             {viewType === 'week' ? (
                 <WeekView
                     currentDate={currentDate}
                     onEventClick={handleEventClick}
-                    onDayClick={handleDayClick}
-                    onShowMore={handleShowMore}
+                    onCellClick={handleGridCellClick}
                 />
             ) : (
                 <MonthView

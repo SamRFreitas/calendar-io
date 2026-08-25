@@ -134,5 +134,65 @@ test.describe('Calendar E2E', () => {
         
         await expect(page.locator('text=Conflicts with "First Event"')).toBeVisible({ timeout: 5000 })
     })
-    
+
+    test('clicking a week-grid cell pre-fills the event form with that date and hour', async ({ page }) => {
+        await page.click('text=Week')
+
+        const thirdColumn = page.locator('.week-grid-day-column').nth(2)
+        await thirdColumn.locator('.week-grid-hour-cell').nth(9).click()
+
+        const startInput = page.locator('[data-testid="event-start"]')
+        await expect(startInput).toBeVisible()
+        expect(await startInput.inputValue()).toMatch(/T09:00$/)
+
+        const endInput = page.locator('[data-testid="event-end"]')
+        expect(await endInput.inputValue()).toMatch(/T10:00$/)
+    })
+
+    test('editing a past event without changing its time succeeds (no longer blocked)', async ({ page }) => {
+        await page.evaluate(() => {
+            const yesterday = new Date()
+            yesterday.setDate(yesterday.getDate() - 1)
+            const pad = (n: number) => String(n).padStart(2, '0')
+            const y = yesterday.getFullYear()
+            const m = pad(yesterday.getMonth() + 1)
+            const d = pad(yesterday.getDate())
+            const events = JSON.parse(localStorage.getItem('events') || '[]')
+            events.push({
+                id: 'past-evt-1',
+                type: 'meeting',
+                name: 'Old Meeting',
+                startDate: `${y}-${m}-${d}T10:00:00`,
+                endDate: `${y}-${m}-${d}T11:00:00`,
+            })
+            localStorage.setItem('events', JSON.stringify(events))
+        })
+        await page.reload() // resets currentDate to real "today" -> current month view shows yesterday
+
+        await page.click('text=Old Meeting')
+        await page.fill('[data-testid="event-name"]', 'Old Meeting Renamed')
+        await page.click('[data-testid="event-save"]')
+
+        await expect(page.locator('text=Cannot create an event in the past')).not.toBeVisible()
+        await expect(page.locator('text=Old Meeting Renamed')).toBeVisible()
+    })
+
+    test('moving an existing event start into the past is still blocked', async ({ page }) => {
+        await page.click('[data-testid="add-event-button"]')
+        await page.fill('[data-testid="event-name"]', 'Move Test')
+        await page.selectOption('[data-testid="event-type"]', 'meeting')
+        await page.fill('[data-testid="event-start"]', '2026-09-01T10:00')
+        await page.fill('[data-testid="event-end"]', '2026-09-01T11:00')
+        await page.click('[data-testid="event-save"]')
+
+        await page.click('text=Move Test')
+        await page.fill('[data-testid="event-start"]', '2020-01-01T10:00')
+        await page.fill('[data-testid="event-end"]', '2020-01-01T11:00')
+
+        const saveButtons = page.locator('[data-testid="event-save"]')
+        const count = await saveButtons.count()
+        await saveButtons.nth(count - 1).click({ force: true })
+
+        await expect(page.locator('text=Cannot create an event in the past')).toBeVisible()
+    })
 })

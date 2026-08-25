@@ -66,3 +66,39 @@ export function getEventsForWeek(events: Event[], weekStart: string): Event[] {
         return eventStart.isBefore(weekEnd) && eventEnd.isAfter(dayjs(weekStart).startOf('day'))
     })
 }
+
+const MINUTES_PER_DAY = 1440
+const MIN_HEIGHT_PERCENT = 1.5
+
+export interface EventSegment {
+    topPercent: number
+    heightPercent: number
+    continuesAfter: boolean
+    continuesBefore: boolean
+}
+
+/**
+ * Computes the vertical position/height (as % of a 24h column) of an event's
+ * portion that falls within a given day, clamped to that day's boundaries.
+ * Returns null if the event doesn't touch the day at all.
+ */
+export function getEventSegmentForDay(event: Event, day: dayjs.Dayjs): EventSegment | null {
+    const dayStart = day.startOf('day')
+    const dayEnd = day.endOf('day')
+    const eventStart = dayjs(event.startDate)
+    const eventEnd = dayjs(event.endDate)
+
+    if (eventEnd.isBefore(dayStart) || eventStart.isAfter(dayEnd)) return null
+
+    const segmentStart = eventStart.isBefore(dayStart) ? dayStart : eventStart
+    const segmentEnd = eventEnd.isAfter(dayEnd) ? dayEnd : eventEnd
+    const startMinutes = segmentStart.diff(dayStart, 'minute')
+    const endMinutes = segmentEnd.diff(dayStart, 'minute')
+
+    return {
+        topPercent: (startMinutes / MINUTES_PER_DAY) * 100,
+        heightPercent: Math.max(((endMinutes - startMinutes) / MINUTES_PER_DAY) * 100, MIN_HEIGHT_PERCENT),
+        continuesAfter: eventEnd.isAfter(dayEnd),
+        continuesBefore: eventStart.isBefore(dayStart),
+    }
+}
