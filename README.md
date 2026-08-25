@@ -9,6 +9,10 @@
 ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 ![ESLint](https://img.shields.io/badge/ESLint-4B3263?style=for-the-badge&logo=eslint&logoColor=white)
 ![Prettier](https://img.shields.io/badge/prettier-%23F7B93E.svg?style=for-the-badge&logo=prettier&logoColor=black)
+![Claude](https://img.shields.io/badge/claude-%23D97757.svg?style=for-the-badge&logo=claude&logoColor=white)
+![opencode](https://img.shields.io/badge/opencode-%23000000.svg?style=for-the-badge&logo=opencode&logoColor=white)
+![ui-ux-pro-max](https://img.shields.io/badge/skill-ui--ux--pro--max-8B5CF6?style=for-the-badge)
+![ponytail](https://img.shields.io/badge/plugin-ponytail-1a1a1a?style=for-the-badge)
 
 # Calendar IO
 
@@ -123,14 +127,20 @@ npx playwright test --headed
 - **Decision**: Used `localStorage` to persist events across page reloads.
 - **Why**: Simple, client-side storage that requires no additional dependencies. Events are saved automatically on each CRUD operation and loaded on app initialization.
 
+### Dark Mode
+
+- **Decision**: Added a light/dark theme toggle in the menu bar, persisted to `localStorage` and synced to the document on load (no flash of the wrong theme).
+- **Why**: A small, self-contained feature to practice theming with Tailwind's dark mode variant and semantic color tokens instead of hardcoded colors, while keeping every existing component readable in both modes.
+
 ### Validation and Edge Cases
 
 - **Decision**: Implemented validations to handle edge cases such as:
-  - Blocking events in the past (both visually via `min` attribute and on save)
+  - Blocking new events created in the past, and blocking an existing event's start time from being moved into the past (both visually via the `min` attribute when creating, and on save)
+  - Editing an already-past event without changing its time is allowed — only an active change into the past is blocked, matching how Google/Apple/Outlook calendars keep past events editable
   - Preventing overlapping events (time slot conflicts)
   - Ordering events by start time
   - Styling past dates differently
-- **Why**: Ensures data integrity and improves user experience by preventing invalid or conflicting operations.
+- **Why**: Ensures data integrity and improves user experience by preventing invalid or conflicting operations, without locking users out of correcting something that already happened.
 
 ### Testing with `data-testid`
 
@@ -152,50 +162,37 @@ npx playwright test --headed
 
 #### JSON Data Loading
 
-- **Limitation**: The approach used to load the `events.json` file via `fetch` may not follow best practices for production applications.
-- **Why**: The current implementation is functional but does not handle advanced scenarios like caching, retries, or error boundaries.
+- **Limitation**: The approach used to load the `events.json` file via `fetch` may not follow best practices for production applications. There's actually a half-built attempt at date-keyed caching in `useLoadEvents` (a `Map` ref + a 5-minute staleness check) — but the `shouldRefresh` value it computes is never read anywhere, so it doesn't actually do anything yet. Retrying after a failed load reloads the whole page rather than re-running just the fetch, and there's no React error boundary, only manual error state.
+- **Why**: The current implementation is functional but does not handle advanced scenarios like real caching, retries, or error boundaries.
 - **Impact**: While it works for this challenge, it may not be robust enough for a production environment.
-- **Goal**: Refactor to use a more structured data layer better caching and error handling.
+- **Goal**: Wire up the existing cache check (or remove it if it's not worth keeping), retry just the fetch instead of reloading the page, and add a real error boundary.
 
-#### Responsiveness
+#### ~~Responsiveness~~ — Resolved
 
-- **Limitation**: The UI is not fully responsive for mobile devices.
-- **Why**: The challenge description did not explicitly require responsiveness, so I prioritized desktop functionality and feature completeness.
-- **Impact**: The application works well on desktop but may have usability issues on smaller screens.
-- **Goal**: Implement a responsive design to ensure a consistent experience across all devices.
+The UI is now fully responsive across desktop, tablet, and mobile — including a dedicated single-day agenda for Week View and a simplified dot-based Month View on small screens. Kept here (struck through) so the reasoning trail stays visible rather than silently disappearing.
 
 ### Areas for Future Improvement
 
-#### Click on Day to Add Event
+#### ~~Click on Day to Add Event~~ — Done
 
-- Allow users to click directly on a calendar day to open the event creation modal with the selected date pre‑filled.
-- Improves UX by reducing steps and making event creation more intuitive.
+Clicking a calendar day (or an hour cell in Week View) opens the event form with that date/time pre-filled. Past days/hours are excluded, matching how real calendar apps only let you create events going forward.
 
 #### Multi‑day Events
 
-- Support events that span multiple days (e.g., startDate on one day, endDate on a later day).
+- **Status**: Partial. In Week View, an event that crosses midnight is clipped to the day it starts and shows a small "▸" indicator that it continues — it isn't yet spread visually across the following days, and Month View has no multi-day handling at all.
+- Support events that span multiple days (e.g., startDate on one day, endDate on a later day) fully, in both views.
 - Display these events visually across the corresponding days in both month and week views.
-
-#### Refactor Redux Toolkit Implementation
-
-- Separate UI state from domain state (e.g., calendar view, selected date).
 
 #### Improve Data Loading
 
-- Implement error boundaries for better error handling.
-- Add loading states and skeleton screens for a smoother UX.
-- Cache events to avoid redundant fetches on navigation.
+- Wire up (or remove) the dead `shouldRefresh` cache check in `useLoadEvents` — see "JSON Data Loading" above.
+- Implement a real error boundary instead of manual error state.
+- Add loading states and skeleton screens for a smoother UX (today it's just a "Loading events..." message).
 
 #### Expand Test Coverage
 
-- Write component tests with React Testing Library.
-- Test edge cases like invalid date inputs, duplicate event IDs, and large datasets.
-
-#### Responsive Design
-
-- Make the calendar fully responsive for mobile and tablet devices.
-- Adjust font sizes, spacing, and layouts for smaller screens.
-- Test on multiple devices and screen sizes.
+- **Status**: Mostly done — `Day`, `WeekView`, `EventForm`, and `DayEventsList` now have real React Testing Library component tests, not just utility-function tests.
+- Still missing: edge cases like invalid date inputs, duplicate event IDs, and large datasets.
 
 #### Custom Hooks for Reusability
 
