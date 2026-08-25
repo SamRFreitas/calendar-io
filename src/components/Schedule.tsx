@@ -36,7 +36,7 @@ export default function Schedule() {
 
     const handleDayClick = (date: dayjs.Dayjs) => {
         dispatch(uiSetCurrentDate(date.toISOString()))
-        dispatch(openModal())
+        dispatch(openModal(date.format('YYYY-MM-DD')))
     }
 
     const handleShowMore = (date: dayjs.Dayjs) => {
@@ -174,7 +174,7 @@ export default function Schedule() {
                         onAddEvent={() => {
                             dispatch(closeDayEvents())
                             dispatch(uiSetCurrentDate(dayjs(viewingDayEvents).toISOString()))
-                            dispatch(openModal())
+                            dispatch(openModal(viewingDayEvents))
                         }}
                     />
                 )}

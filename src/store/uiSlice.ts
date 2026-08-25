@@ -31,6 +31,7 @@ interface UiState {
     editingEvent: Event | null
     theme: Theme
     viewingDayEvents: string | null
+    newEventDate: string | null
 }
 
 const initialState: UiState = {
@@ -40,6 +41,7 @@ const initialState: UiState = {
     editingEvent: null,
     theme: loadThemeFromLocalStorage(),
     viewingDayEvents: null,
+    newEventDate: null,
 }
 
 const uiSlice = createSlice({
@@ -52,11 +54,13 @@ const uiSlice = createSlice({
         setCurrentDate: (state, action: PayloadAction<string>) => {
             state.currentDate = action.payload
         },
-        openModal: (state) => {
+        openModal: (state, action: PayloadAction<string | undefined>) => {
             state.isModalOpen = true
+            state.newEventDate = action.payload ?? null
         },
         closeModal: (state) => {
             state.isModalOpen = false
+            state.newEventDate = null
         },
         setEditingEvent: (state, action: PayloadAction<Event | null>) => {
             state.editingEvent = action.payload

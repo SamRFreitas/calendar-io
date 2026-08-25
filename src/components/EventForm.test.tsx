@@ -1,20 +1,32 @@
 import { render, screen } from '@testing-library/react'
 import { Provider } from 'react-redux'
 import { configureStore } from '@reduxjs/toolkit'
+import dayjs from 'dayjs'
 import EventForm from './EventForm'
 import { type Event } from '../types/event'
 import eventsReducer from '../store/eventsSlice'
+import uiReducer, { type Theme } from '../store/uiSlice'
 
-const createMockStore = () =>
+const createMockStore = (newEventDate: string | null = null) =>
   configureStore({
     reducer: {
       events: eventsReducer,
+      ui: uiReducer,
     },
     preloadedState: {
       events: {
-        items: [],       
+        items: [],
         loading: false,
         error: null,
+      },
+      ui: {
+        viewType: 'month' as const,
+        currentDate: dayjs().toISOString(),
+        isModalOpen: true,
+        editingEvent: null,
+        theme: 'light' as Theme,
+        viewingDayEvents: null,
+        newEventDate,
       },
     },
   })
@@ -28,8 +40,8 @@ const mockEvent: Event = {
 }
 
 describe('EventForm component', () => {
-  const renderWithProvider = (ui: React.ReactElement) => {
-    return render(<Provider store={createMockStore()}>{ui}</Provider>)
+  const renderWithProvider = (ui: React.ReactElement, newEventDate: string | null = null) => {
+    return render(<Provider store={createMockStore(newEventDate)}>{ui}</Provider>)
   }
 
   test('renders add event form by default', () => {
@@ -100,5 +112,39 @@ describe('EventForm component', () => {
   test('renders correctly with event prop', () => {
     renderWithProvider(<EventForm event={mockEvent} onClose={jest.fn()} />)
     expect(screen.getByText('Edit Event')).toBeInTheDocument()
+  })
+
+  test('defaults start to now and end to start+1h when creating with no newEventDate', () => {
+    renderWithProvider(<EventForm event={undefined} onClose={jest.fn()} />, null)
+    const startValue = (screen.getByTestId('event-start') as HTMLInputElement).value
+    const endValue = (screen.getByTestId('event-end') as HTMLInputElement).value
+    expect(startValue.slice(0, 10)).toBe(dayjs().format('YYYY-MM-DD'))
+    expect(dayjs(endValue).diff(dayjs(startValue), 'minute')).toBe(60)
+  })
+
+  test('defaults start to 00:00 of a future clicked day, end 1h later', () => {
+    const futureDate = dayjs().add(3, 'day').format('YYYY-MM-DD')
+    renderWithProvider(<EventForm event={undefined} onClose={jest.fn()} />, futureDate)
+    const startValue = (screen.getByTestId('event-start') as HTMLInputElement).value
+    const endValue = (screen.getByTestId('event-end') as HTMLInputElement).value
+    expect(startValue).toBe(`${futureDate}T00:00`)
+    expect(endValue).toBe(`${futureDate}T01:00`)
+  })
+
+  test('defaults start to now (not midnight) when the clicked day is today', () => {
+    const todayDate = dayjs().format('YYYY-MM-DD')
+    renderWithProvider(<EventForm event={undefined} onClose={jest.fn()} />, todayDate)
+    const startValue = (screen.getByTestId('event-start') as HTMLInputElement).value
+    expect(startValue.slice(0, 10)).toBe(todayDate)
+    expect(startValue.endsWith('T00:00')).toBe(false)
+  })
+
+  test('ignores newEventDate when editing an existing event', () => {
+    const futureDate = dayjs().add(3, 'day').format('YYYY-MM-DD')
+    renderWithProvider(<EventForm event={mockEvent} onClose={jest.fn()} />, futureDate)
+    const startValue = (screen.getByTestId('event-start') as HTMLInputElement).value
+    const endValue = (screen.getByTestId('event-end') as HTMLInputElement).value
+    expect(startValue).toBe('2026-06-22T09:00')
+    expect(endValue).toBe('2026-06-22T09:30')
   })
 })

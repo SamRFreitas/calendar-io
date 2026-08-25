@@ -6,29 +6,34 @@ import { addEvent, updateEvent, deleteEvent } from '../store/eventsSlice'
 import { type Event } from '../types/event'
 import { useAppSelector } from '../store/hooks'
 import { selectEvents } from '../store/eventsSlice'
+import { type RootState } from '../store'
 
 interface EventFormProps {
     event?: Event | null
     onClose: () => void
-    startDate?: string
-    endDate?: string
 }
 
-export default function EventForm({ event, onClose, startDate: propStartDate, endDate: propEndDate }: EventFormProps) {
+export default function EventForm({ event, onClose }: EventFormProps) {
     const dispatch = useDispatch()
     const isEditing = !!event
     const existingEvents = useAppSelector(selectEvents)
+    const newEventDate = useAppSelector((state: RootState) => state.ui.newEventDate)
 
     const now = dayjs()
     const minDate = now.format('YYYY-MM-DDTHH:mm')
 
+    const base =
+        !isEditing && newEventDate && dayjs(newEventDate).isAfter(now, 'day')
+            ? dayjs(newEventDate).startOf('day')
+            : now
+
     const [name, setName] = useState(event?.name || '')
     const [type, setType] = useState<Event['type']>(event?.type || 'meeting')
     const [startDate, setStartDate] = useState(
-        event?.startDate?.slice(0, 16) || propStartDate || minDate
+        event?.startDate?.slice(0, 16) || base.format('YYYY-MM-DDTHH:mm')
     )
     const [endDate, setEndDate] = useState(
-        event?.endDate?.slice(0, 16) || propEndDate || minDate
+        event?.endDate?.slice(0, 16) || base.add(1, 'hour').format('YYYY-MM-DDTHH:mm')
     )
 
     const validateEvent = (): boolean => {
