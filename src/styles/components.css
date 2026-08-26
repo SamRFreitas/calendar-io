@@ -1,5 +1,5 @@
 @utility add-event-button {
-    @apply px-4 py-2 min-h-11 rounded-md bg-card text-foreground hover:bg-muted transition-colors font-bold text-sm md:text-base cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+    @apply px-3 py-1.5 min-h-9 rounded-md bg-card text-foreground shadow-sm hover:bg-muted transition-colors font-bold text-xs md:text-sm cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
 }
 
 @utility event-badge {
@@ -27,7 +27,7 @@
 }
 
 @utility menu-container {
-  @apply flex flex-wrap items-center justify-between gap-3 p-3 md:gap-4 md:p-4 bg-primary rounded-xl shadow-sm mb-6;
+  @apply flex flex-wrap items-center justify-between gap-1.5 p-2 md:gap-2 md:p-2.5 bg-primary rounded-xl shadow-sm mb-4;
 }
 
 @utility schedule-container {
@@ -35,7 +35,7 @@
 }
 
 @utility week-header {
-  @apply grid grid-cols-7 text-center bg-primary text-white font-bold rounded-lg text-sm md:text-lg py-2 md:py-4 mb-2 md:mb-3;
+  @apply grid grid-cols-7 text-center bg-primary text-white font-bold rounded-lg text-sm md:text-lg py-1.5 md:py-2 mb-1.5 md:mb-2;
 }
 
 @utility skeleton-block {

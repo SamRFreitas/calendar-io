@@ -7,7 +7,7 @@
 }
 
 @utility view-toggle-button {
-    @apply px-4 py-2.5 min-h-11 rounded-md text-base md:text-lg md:px-5 font-bold transition-colors bg-transparent text-muted-foreground hover:text-foreground cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+    @apply px-3 py-1.5 min-h-9 rounded-md text-sm md:text-base md:px-4 font-bold shadow-sm transition-colors bg-transparent text-muted-foreground hover:text-foreground cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
 }
 
 @utility view-toggle-button-active {
@@ -15,11 +15,11 @@
 }
 
 @utility theme-toggle-button {
-    @apply relative w-11 h-11 shrink-0 flex items-center justify-center rounded-full bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+    @apply relative w-9 h-9 shrink-0 flex items-center justify-center rounded-full bg-muted text-muted-foreground shadow-sm hover:text-foreground transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
 }
 
 @utility theme-toggle-icon {
-    @apply absolute w-5 h-5 transition-all duration-200 ease-out motion-reduce:transition-none;
+    @apply absolute w-4 h-4 transition-all duration-200 ease-out motion-reduce:transition-none;
 }
 
 @utility theme-toggle-icon-hidden {
@@ -27,13 +27,13 @@
 }
 
 @utility nav-button {
-    @apply px-4 py-2.5 min-h-11 min-w-11 flex items-center justify-center rounded-md bg-card hover:bg-border transition-colors text-lg font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+    @apply px-3 py-1.5 min-h-9 min-w-9 flex items-center justify-center rounded-md bg-card shadow-sm hover:bg-border transition-colors text-base font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
 }
 
 @utility nav-button-today {
-    @apply px-4 py-1.5 rounded-md bg-primary text-white hover:bg-primary-hover transition-colors text-lg font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+    @apply px-3 py-1 rounded-md bg-primary text-white shadow-sm hover:bg-primary-hover transition-colors text-base font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
 }
 
 @utility nav-title {
-    @apply text-lg font-bold text-white;
+    @apply text-lg md:text-2xl font-bold text-white leading-none;
 }
