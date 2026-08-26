@@ -3,7 +3,7 @@
 }
 
 @utility event-badge {
-    @apply truncate px-1.5 py-1 rounded text-white text-xs cursor-pointer transition-colors duration-150;
+    @apply truncate px-2 py-1.5 rounded-lg shadow-sm text-white text-xs cursor-pointer transition-colors duration-150;
 }
 
 @utility event-badge-hover {
@@ -11,7 +11,7 @@
 }
 
 @utility event-badge-more {
-    @apply text-[10px] md:text-xs text-muted-foreground px-1 cursor-pointer hover:text-foreground text-center;
+    @apply inline-flex items-center justify-center rounded-md bg-muted text-muted-foreground text-[10px] md:text-xs px-1.5 py-0.5 cursor-pointer hover:bg-border hover:text-foreground transition-colors text-center;
 }
 
 @utility event-meeting {
@@ -35,7 +35,7 @@
 }
 
 @utility week-header {
-  @apply grid grid-cols-7 text-center mt-8 bg-primary text-white font-bold rounded-t-lg text-sm md:text-lg py-2 md:py-4;
+  @apply grid grid-cols-7 text-center bg-primary text-white font-bold rounded-lg text-sm md:text-lg py-2 md:py-4 mb-2 md:mb-3;
 }
 
 @utility skeleton-block {

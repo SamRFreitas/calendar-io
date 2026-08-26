@@ -71,10 +71,12 @@ export default function Schedule() {
                     <div className="skeleton-block h-11 w-56" />
                     <div className="skeleton-block h-11 w-40" />
                 </div>
-                <div className="grid grid-cols-7 gap-0.5 md:gap-1 mt-8">
-                    {Array.from({ length: 35 }).map((_, i) => (
-                        <div key={i} className="skeleton-block aspect-square md:min-h-24" />
-                    ))}
+                <div className="calendar-panel mt-6">
+                    <div className="grid grid-cols-7 gap-1 md:gap-2">
+                        {Array.from({ length: 35 }).map((_, i) => (
+                            <div key={i} className="skeleton-block aspect-square md:min-h-24" />
+                        ))}
+                    </div>
                 </div>
             </div>
         )
@@ -134,31 +136,33 @@ export default function Schedule() {
                 </div>
             </Menu>
 
-            {viewType === 'month' && (
-                <div className="week-header">
-                    {week.map((item: string, index: number) => (
-                        <div key={index} className="w-full">
-                            <span className="hidden md:inline">{item}</span>
-                            <span className="md:hidden">{weekShort[index]}</span>
-                        </div>
-                    ))}
-                </div>
-            )}
+            <div className="calendar-panel mt-6">
+                {viewType === 'month' && (
+                    <div className="week-header">
+                        {week.map((item: string, index: number) => (
+                            <div key={index} className="w-full">
+                                <span className="hidden md:inline">{item}</span>
+                                <span className="md:hidden">{weekShort[index]}</span>
+                            </div>
+                        ))}
+                    </div>
+                )}
 
-            {viewType === 'week' ? (
-                <WeekView
-                    currentDate={currentDate}
-                    onEventClick={handleEventClick}
-                    onCellClick={handleGridCellClick}
-                />
-            ) : (
-                <MonthView
-                    currentDate={currentDate}
-                    onEventClick={handleEventClick}
-                    onDayClick={handleDayClick}
-                    onShowMore={handleShowMore}
-                />
-            )}
+                {viewType === 'week' ? (
+                    <WeekView
+                        currentDate={currentDate}
+                        onEventClick={handleEventClick}
+                        onCellClick={handleGridCellClick}
+                    />
+                ) : (
+                    <MonthView
+                        currentDate={currentDate}
+                        onEventClick={handleEventClick}
+                        onDayClick={handleDayClick}
+                        onShowMore={handleShowMore}
+                    />
+                )}
+            </div>
 
             <Modal isOpen={isModalOpen} onClose={() => dispatch(closeModal())}>
                 <EventForm onClose={() => dispatch(closeModal())} />

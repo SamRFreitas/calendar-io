@@ -7,6 +7,9 @@ import { type Event } from '../types/event'
 import { useAppSelector } from '../store/hooks'
 import { selectEvents } from '../store/eventsSlice'
 import { type RootState } from '../store'
+import { typeIcon, typeLabel } from '../utils/eventTypeVisuals'
+
+const EVENT_TYPES: Event['type'][] = ['meeting', 'task']
 
 interface EventFormProps {
     event?: Event | null
@@ -129,16 +132,27 @@ export default function EventForm({ event, onClose }: EventFormProps) {
             </div>
 
             <div className="form-field">
-                <label className="form-label">Type</label>
-                <select
-                    value={type}
-                    onChange={(e) => setType(e.target.value as Event['type'])}
-                    className="form-select"
+                <label className="form-label" id="event-type-label">Type</label>
+                <div
+                    className="event-type-group"
+                    role="group"
+                    aria-labelledby="event-type-label"
                     data-testid="event-type"
                 >
-                    <option value="meeting">Meeting</option>
-                    <option value="task">Task</option>
-                </select>
+                    {EVENT_TYPES.map((t) => (
+                        <button
+                            key={t}
+                            type="button"
+                            aria-pressed={type === t}
+                            onClick={() => setType(t)}
+                            className={`event-type-button ${type === t ? 'event-type-button-active' : ''}`}
+                            data-testid={`event-type-${t}`}
+                        >
+                            {typeIcon[t]('w-4 h-4')}
+                            <span>{typeLabel[t]}</span>
+                        </button>
+                    ))}
+                </div>
             </div>
 
             <div className="form-field">

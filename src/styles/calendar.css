@@ -1,9 +1,13 @@
+@utility calendar-panel {
+    @apply bg-card border border-border rounded-2xl p-3 md:p-5 shadow-sm;
+}
+
 @utility calendar-day {
-    @apply w-full aspect-square min-h-32 md:min-h-0 flex items-center justify-center bg-card border border-border rounded-md transition-colors duration-200 relative overflow-hidden;
+    @apply w-full aspect-square min-h-32 md:min-h-0 flex items-center justify-center bg-card border border-border/70 rounded-lg shadow-sm transition-all duration-200 relative overflow-hidden;
 }
 
 @utility calendar-day-today {
-    @apply text-foreground font-semibold;
+    @apply text-foreground font-semibold ring-1 ring-primary/40 border-primary/30;
 }
 
 @utility calendar-day-other-month {
@@ -11,7 +15,7 @@
 }
 
 @utility calendar-day-hover {
-    @apply hover:bg-muted cursor-pointer;
+    @apply hover:shadow-md hover:-translate-y-0.5 cursor-pointer;
 }
 
 @utility week-grid-gutter {

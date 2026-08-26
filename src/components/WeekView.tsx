@@ -6,6 +6,7 @@ import { useAppSelector } from '@/store/hooks'
 import { selectEventsByDate } from '@/store/eventsSlice'
 import { type Event } from '@/types/event'
 import { type Day } from '@/types/day'
+import { typeColorClass, typeIcon } from '@/utils/eventTypeVisuals'
 
 interface WeekViewProps {
     currentDate: dayjs.Dayjs
@@ -14,11 +15,6 @@ interface WeekViewProps {
 }
 
 const HOURS = Array.from({ length: 24 }, (_, i) => i)
-
-const typeColorClass: Record<Event['type'], string> = {
-    meeting: 'event-meeting',
-    task: 'event-task',
-}
 
 interface WeekDayColumnProps {
     day: Day
@@ -52,7 +48,7 @@ function WeekDayColumn({ day, now, isSelected, onEventClick, onCellClick }: Week
                 return (
                     <div
                         key={event.id}
-                        className={`event-badge event-badge-hover ${typeColorClass[event.type]} absolute left-0.5 right-0.5 overflow-hidden`}
+                        className={`event-badge event-badge-hover ${typeColorClass[event.type]} absolute left-0.5 right-0.5 overflow-hidden flex items-center gap-1`}
                         style={{ top: `${segment.topPercent}%`, height: `${segment.heightPercent}%` }}
                         onClick={(e) => {
                             e.stopPropagation()
@@ -60,7 +56,8 @@ function WeekDayColumn({ day, now, isSelected, onEventClick, onCellClick }: Week
                         }}
                         data-testid={`event-${event.id}`}
                     >
-                        {event.name}
+                        {typeIcon[event.type]('w-3 h-3 shrink-0')}
+                        <span className="truncate">{event.name}</span>
                         {segment.continuesAfter && <span className="ml-1">▸</span>}
                     </div>
                 )

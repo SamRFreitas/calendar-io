@@ -72,10 +72,12 @@ describe('EventForm component', () => {
     expect(nameInput).toBeInTheDocument()
   })
 
-  test('renders type select with data-testid', () => {
+  test('renders type button group with data-testid', () => {
     renderWithProvider(<EventForm event={undefined} onClose={jest.fn()} />)
-    const typeSelect = screen.getByTestId('event-type')
-    expect(typeSelect).toBeInTheDocument()
+    expect(screen.getByTestId('event-type')).toBeInTheDocument()
+    expect(screen.getByTestId('event-type-meeting')).toBeInTheDocument()
+    expect(screen.getByTestId('event-type-task')).toBeInTheDocument()
+    expect(screen.getByTestId('event-type-meeting')).toHaveAttribute('aria-pressed', 'true')
   })
 
   test('has save button with data-testid', () => {

@@ -1,9 +1,17 @@
 @utility modal-overlay {
-    @apply fixed inset-0 flex items-center justify-center bg-black/50 z-50 p-4;
+    @apply fixed inset-0 flex items-center justify-center bg-black/50 z-50 p-4 opacity-0 transition-opacity duration-200 motion-reduce:transition-none;
+}
+
+@utility modal-overlay-visible {
+    @apply opacity-100;
 }
 
 @utility modal-content {
-    @apply bg-card rounded-lg shadow-lg max-w-md w-full max-h-[90dvh] overflow-y-auto p-6 md:p-8 relative;
+    @apply bg-card rounded-lg shadow-lg max-w-md w-full max-h-[90dvh] overflow-y-auto p-6 md:p-8 relative opacity-0 scale-95 transition-all duration-200 motion-reduce:transition-none;
+}
+
+@utility modal-content-visible {
+    @apply opacity-100 scale-100;
 }
 
 @utility modal-close-button {

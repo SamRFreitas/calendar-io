@@ -15,7 +15,7 @@ test.describe('Mobile responsive behavior', () => {
 
         await page.click('[data-testid="add-event-button"]')
         await page.fill('[data-testid="event-name"]', 'Mobile Tap Test')
-        await page.selectOption('[data-testid="event-type"]', 'meeting')
+        await page.click('[data-testid="event-type-meeting"]')
         await page.fill('[data-testid="event-start"]', '2026-09-01T10:00')
         await page.fill('[data-testid="event-end"]', '2026-09-01T11:00')
         await page.click('[data-testid="event-save"]')
@@ -52,7 +52,7 @@ test.describe('Mobile responsive behavior', () => {
         await page.setViewportSize({ width: 320, height: 700 })
 
         const menuBox = await page.locator('.menu-container').boundingBox()
-        const themeToggleBox = await page.getByRole('button', { name: 'Dark' }).boundingBox()
+        const themeToggleBox = await page.getByTestId('theme-toggle-button').boundingBox()
 
         expect(menuBox).not.toBeNull()
         expect(themeToggleBox).not.toBeNull()

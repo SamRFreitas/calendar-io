@@ -14,6 +14,18 @@
     @apply bg-primary text-white hover:text-white cursor-pointer;
 }
 
+@utility theme-toggle-button {
+    @apply relative w-11 h-11 shrink-0 flex items-center justify-center rounded-full bg-muted text-muted-foreground hover:text-foreground transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+}
+
+@utility theme-toggle-icon {
+    @apply absolute w-5 h-5 transition-all duration-200 ease-out motion-reduce:transition-none;
+}
+
+@utility theme-toggle-icon-hidden {
+    @apply opacity-0 scale-75 rotate-45;
+}
+
 @utility nav-button {
     @apply px-4 py-2.5 min-h-11 min-w-11 flex items-center justify-center rounded-md bg-card hover:bg-border transition-colors text-lg font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
 }

@@ -3,6 +3,7 @@ import { type ScheduleType } from '../types/schedule'
 import { useAppSelector } from '../store/hooks'
 import { selectEventsByDate } from '../store/eventsSlice'
 import { type Event } from '../types/event'
+import { typeColorClass, typeIcon } from '../utils/eventTypeVisuals'
 import dayjs from 'dayjs'
 
 interface DayProps {
@@ -11,11 +12,6 @@ interface DayProps {
     onEventClick: (event: Event) => void
     onDayClick?: (date: dayjs.Dayjs) => void
     onShowMore?: (date: dayjs.Dayjs) => void
-}
-
-const typeColorClass = {
-    meeting: 'event-meeting',
-    task: 'event-task',
 }
 
 const getEventClasses = (event: Event) =>
@@ -80,7 +76,7 @@ export default function Day({ day, view, onEventClick, onDayClick, onShowMore }:
                 </span>
             )}
 
-            <div className="absolute top-1 right-1 flex items-center justify-center">
+            <div className="absolute top-1.5 md:top-2 left-1.5 md:left-2 flex items-center justify-center">
                 {isToday ? (
                     <span className="bg-primary text-white font-bold rounded-full w-6 h-6 md:w-8 md:h-8 flex items-center justify-center text-xs md:text-sm">
                         {day.dayOfMonth}
@@ -96,15 +92,18 @@ export default function Day({ day, view, onEventClick, onDayClick, onShowMore }:
                 )}
             </div>
 
-            <div className="absolute bottom-1 md:bottom-2 left-1 md:left-2 right-1 md:right-2 hidden md:flex flex-col gap-1 text-xs">
+            <div className="absolute bottom-1.5 md:bottom-2.5 left-1.5 md:left-2.5 right-1.5 md:right-2.5 hidden md:flex flex-col gap-1 text-xs">
                 {visibleEvents.map((event: Event) => (
                     <div
                         key={event.id}
-                        className={getEventClasses(event)}
+                        className={`${getEventClasses(event)} flex items-center gap-1`}
                         onClick={(e) => { e.stopPropagation(); onEventClick(event); }}
                         data-testid={`event-${event.id}`}
                     >
-                        {event.name}
+                        {typeIcon[event.type]('w-3 h-3 shrink-0')}
+                        <span className="truncate">
+                            {dayjs(event.startDate).format('HH:mm')} {event.name}
+                        </span>
                     </div>
                 ))}
                 {hiddenCount > 0 && (
@@ -118,7 +117,7 @@ export default function Day({ day, view, onEventClick, onDayClick, onShowMore }:
             </div>
 
             {sortedEvents.length > 0 && (
-                <div className="absolute bottom-1 left-1 right-1 flex md:hidden items-center justify-center gap-0.5">
+                <div className="absolute bottom-1.5 left-1.5 right-1.5 flex md:hidden items-center justify-center gap-0.5">
                     {sortedEvents.slice(0, MAX_VISIBLE_DOTS).map((event: Event) => (
                         <span key={event.id} className={`event-dot ${typeColorClass[event.type]}`} />
                     ))}

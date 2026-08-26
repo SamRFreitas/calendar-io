@@ -20,7 +20,7 @@ export default function MonthView({
 
     return (
         <div className="@container">
-            <div className="grid grid-cols-7 gap-0.5 md:gap-1">
+            <div className="grid grid-cols-7 gap-1 md:gap-2">
                 {days.map((day, index) => (
                     <Day
                         key={index}

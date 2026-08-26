@@ -2,16 +2,12 @@ import dayjs from 'dayjs'
 import { useAppSelector } from '../store/hooks'
 import { selectEventsByDate } from '../store/eventsSlice'
 import { type Event } from '../types/event'
+import { typeBorderClass } from '../utils/eventTypeVisuals'
 
 interface DayEventsListProps {
     date: string
     onEventClick: (event: Event) => void
     onAddEvent: () => void
-}
-
-const typeColorClass: Record<Event['type'], string> = {
-    meeting: 'event-meeting',
-    task: 'event-task',
 }
 
 export default function DayEventsList({ date, onEventClick, onAddEvent }: DayEventsListProps) {
@@ -30,9 +26,8 @@ export default function DayEventsList({ date, onEventClick, onAddEvent }: DayEve
                         key={event.id}
                         type="button"
                         onClick={() => onEventClick(event)}
-                        className="flex items-center gap-3 min-h-11 px-3 py-2 rounded-md border border-border bg-card hover:bg-muted transition-colors text-left cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+                        className={`flex items-center gap-3 min-h-11 pl-3 pr-3 py-2 rounded-lg border border-border border-l-4 bg-card hover:bg-muted transition-colors text-left cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 ${typeBorderClass[event.type]}`}
                     >
-                        <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${typeColorClass[event.type]}`} />
                         <span className="text-sm text-muted-foreground shrink-0">
                             {dayjs(event.startDate).format('HH:mm')}
                         </span>

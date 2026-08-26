@@ -100,15 +100,15 @@ describe('Day component', () => {
     }
     const { container } = renderDay({}, [mockEvent, event2])
     const eventBadges = container.querySelectorAll('.event-badge')
-    expect(eventBadges[0].textContent).toBe('Weekly briefing')
-    expect(eventBadges[1].textContent).toBe('Later event')
+    expect(eventBadges[0].textContent).toBe('09:00 Weekly briefing')
+    expect(eventBadges[1].textContent).toBe('14:00 Later event')
   })
 
   test('renders event badges with data-testid', () => {
     const { container } = renderDay()
     const eventBadge = container.querySelector('[data-testid="event-evt-001"]')
     expect(eventBadge).toBeInTheDocument()
-    expect(eventBadge?.textContent).toBe('Weekly briefing')
+    expect(eventBadge?.textContent).toBe('09:00 Weekly briefing')
   })
 
   test('renders week view with month span', () => {
