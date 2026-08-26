@@ -27,7 +27,7 @@
 }
 
 @utility nav-button {
-    @apply px-3 py-1.5 min-h-9 min-w-9 flex items-center justify-center rounded-md bg-card shadow-sm hover:bg-border transition-colors text-base font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+    @apply px-2 py-1 min-h-7 min-w-7 flex items-center justify-center rounded-md bg-card shadow-sm hover:bg-border transition-colors text-sm font-medium cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
 }
 
 @utility nav-button-today {

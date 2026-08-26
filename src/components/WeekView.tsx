@@ -92,7 +92,7 @@ export default function WeekView({ currentDate, onEventClick, onCellClick }: Wee
     const nowPercent = ((now.hour() * 60 + now.minute()) / 1440) * 100
 
     return (
-        <div>
+        <div className="mt-2 md:mt-3">
             <div className="hidden md:flex">
                 <div className="week-grid-gutter" />
                 <div className="grid grid-cols-7 flex-1">

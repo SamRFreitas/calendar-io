@@ -28,13 +28,11 @@ export default function NavigationBar({
     const title = formatTitle(currentDate, view)
 
     return (
-        <div className="flex items-center justify-between flex-1">
+        <div className="flex items-center justify-center gap-1.5 md:gap-4 flex-1">
             <button onClick={onPrev} className="nav-button" aria-label="Previous">
                 ←
             </button>
-            <div className="flex items-center gap-3">
-                <span className="nav-title">{title}</span>
-            </div>
+            <span className="nav-title">{title}</span>
             <button onClick={onNext} className="nav-button" aria-label="Next">
                 →
             </button>
